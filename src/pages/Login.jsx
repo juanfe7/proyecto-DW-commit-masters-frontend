@@ -8,10 +8,18 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault()
-    if (usuario && contraseña) {
-      navigate('/home') // Redirige al home después de iniciar sesión
+    if (!usuario || !contraseña) {
+      alert('Por favor, completa todos los campos.')
+      return
+    }
+
+    // Redirigir según el número de usuario
+    if (usuario === '111111') {
+      navigate('/cliente') // Redirige a la parte de cliente
+    } else if (usuario === '222222') {
+      navigate('/pos') // Redirige a la parte de POS
     } else {
-      alert('Por favor, ingresa usuario y contraseña')
+      alert('Usuario no autorizado.')
     }
   }
 
@@ -34,7 +42,7 @@ const Login = () => {
           <img
             src="/src/assets/logo_login_sabana.png"
             alt="Logo Sabana"
-            className="w-750 h-45"
+            className="w-50 h-auto"
           />
         </div>
         <h2 className="text-2xl font-bold mb-4 text-center text-white">
@@ -50,7 +58,7 @@ const Login = () => {
             onChange={handleUsuarioChange}
             className="w-full px-3 py-2 rounded-[15px] bg-white text-black"
             placeholder="ID Usuario"
-            maxLength={12} // Limitar el input a 12 caracteres
+            maxLength={12}
             required
           />
           {usuario.length > 0 && usuario.length < 6 && (
@@ -86,7 +94,6 @@ const Login = () => {
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"
-          disabled={usuario.length < 6 || usuario.length > 12}
         >
           Iniciar Sesión
         </button>

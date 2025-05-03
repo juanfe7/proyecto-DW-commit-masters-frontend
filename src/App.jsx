@@ -1,12 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import { routes } from './config/routes'
+import { BackgroundProvider, useBackground } from './context/BackgroundContext'
+import { twMerge } from 'tailwind-merge'
+import { Navigate } from 'react-router-dom'
 
-function App() {
-  const [count, setCount] = useState(0)
+const AppContent = () => {
+  const { backgroundColor } = useBackground()
+  const location = useLocation()
+
+  const hideNavbarAndFooter = location.pathname === '/login'
 
   return (
-    <h1>Hola mundo</h1>
+    <div className={twMerge('min-h-screen', backgroundColor)}>
+      {!hideNavbarAndFooter && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        {routes.map((route) => (
+          <Route
+            key={route.id}
+            path={route.path}
+            element={<route.component />}
+          />
+        ))}
+      </Routes>
+      {!hideNavbarAndFooter && <Footer />}
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <BackgroundProvider>
+        <AppContent />
+      </BackgroundProvider>
+    </Router>
   )
 }
 

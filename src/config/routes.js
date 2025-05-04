@@ -1,5 +1,5 @@
-import ClienteDashboard from '../pages/ClienteDashboard'
-import ClienteProfile from '../pages/ClienteProfile'
+import ClienteHistorial from '../pages/ClienteHistorial'
+import ClienteCarrito from '../pages/ClienteCarrito' // Cambia el nombre del componente si es necesario
 import POSDashboard from '../pages/POSDashboard'
 import POSProfile from '../pages/POSProfile'
 import Login from '../pages/Login'
@@ -20,16 +20,16 @@ export const routes = [
     component: Cliente,
   },
   {
-    id: 'cliente-dashboard',
-    path: '/cliente/dashboard',
-    name: 'Cliente Dashboard',
-    component: ClienteDashboard,
+    id: 'cliente-historial',
+    path: '/cliente/historial',
+    name: 'Cliente Historial',
+    component: ClienteHistorial,
   },
   {
-    id: 'cliente-profile',
-    path: '/cliente/profile',
-    name: 'Cliente Profile',
-    component: ClienteProfile,
+    id: 'cliente-carrito', // Cambiado de cliente-profile a cliente-carrito
+    path: '/cliente/carrito',
+    name: 'Cliente Carrito',
+    component: ClienteCarrito,
   },
   {
     id: 'pos',

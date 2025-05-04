@@ -1,31 +1,59 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../config/api' // ✅ AÑADIDO
 
 const Login = () => {
   const [usuario, setUsuario] = useState('')
   const [contraseña, setContraseña] = useState('')
+  const [error, setError] = useState('') // ✅ AÑADIDO
   const navigate = useNavigate()
 
-  const handleLogin = (e) => {
-    e.preventDefault()
+  const handleLogin = async (e) => {
+    e.preventDefault();
     if (!usuario || !contraseña) {
-      alert('Por favor, completa todos los campos.')
-      return
+      alert('Por favor, completa todos los campos.');
+      return;
     }
-
-    // Redirigir según el número de usuario
-    if (usuario === '111111') {
-      navigate('/cliente') // Redirige a la parte de cliente
-    } else if (usuario === '222222') {
-      navigate('/pos') // Redirige a la parte de POS
-    } else {
-      alert('Usuario no autorizado.')
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: usuario,
+          password: contraseña
+        })
+      });
+  
+      const data = await response.json();
+  
+      if (!response.ok) {
+        alert(data.error || 'Error al iniciar sesión');
+        return;
+      }
+  
+      // Guardar token (opcional)
+      localStorage.setItem('token', data.token);
+  
+      // Redirigir según el rol
+      if (data.rol === 'cliente') {
+        navigate('/cliente');
+      } else if (data.rol === 'pos') {
+        navigate('/pos');
+      } else {
+        alert('Rol no reconocido.');
+      }
+    } catch (error) {
+      console.error('Error en el login:', error);
+      alert('Ocurrió un error al iniciar sesión.');
     }
-  }
+  };
+  
 
   const handleUsuarioChange = (e) => {
     const value = e.target.value
-    // Validar que solo sean números y que estén entre 6 y 12 caracteres
     if (/^\d*$/.test(value) && value.length <= 12) {
       setUsuario(value)
     }
@@ -33,11 +61,7 @@ const Login = () => {
 
   return (
     <div className="flex items-center justify-center h-screen bg-[#041D64]">
-      <form
-        onSubmit={handleLogin}
-        className="bg-[#041D64] p-6 w-80"
-      >
-        {/* Imagen del logo */}
+      <form onSubmit={handleLogin} className="bg-[#041D64] p-6 w-80">
         <div className="flex justify-center mb-4">
           <img
             src="/src/assets/logo_login_sabana.png"
@@ -80,7 +104,6 @@ const Login = () => {
             required
           />
         </div>
-        {/* Recordar Sesión */}
         <div className="mb-4 flex items-center">
           <input
             type="checkbox"
@@ -91,6 +114,7 @@ const Login = () => {
             Recordar Sesión
           </label>
         </div>
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* ✅ MOSTRAR ERROR */}
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"

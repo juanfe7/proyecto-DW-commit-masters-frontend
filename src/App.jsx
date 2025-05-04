@@ -16,8 +16,12 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         {routes.map((route) => (
-          <Route key={route.id} path={route.path} element={<route.component />} />
-        ))}
+            <Route
+              key={route.id}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
       </Routes>
       {!hideNavbarAndFooter && <Footer />}
     </div>

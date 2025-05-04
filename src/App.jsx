@@ -8,18 +8,20 @@ const AppContent = () => {
   const { backgroundColor } = useBackground()
   const location = useLocation()
 
-  const hideNavbarAndFooter = location.pathname === '/login'
+  const hideNavbar = location.pathname === '/login'
 
   return (
     <div className={`flex flex-col min-h-screen ${backgroundColor}`}>
-      {!hideNavbarAndFooter && <Navbar />}
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        {routes.map((route) => (
-          <Route key={route.id} path={route.path} element={<route.component />} />
-        ))}
-      </Routes>
-      {!hideNavbarAndFooter && <Footer />}
+      {!hideNavbar && <Navbar />}
+      <main className="flex-grow overflow-auto">
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          {routes.map((route) => (
+            <Route key={route.id} path={route.path} element={<route.component />} />
+          ))}
+        </Routes>
+      </main>
+      <Footer />
     </div>
   )
 }

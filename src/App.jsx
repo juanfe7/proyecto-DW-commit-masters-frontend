@@ -11,17 +11,13 @@ const AppContent = () => {
   const hideNavbarAndFooter = location.pathname === '/login'
 
   return (
-    <div className={`min-h-screen ${backgroundColor}`}>
+    <div className={`flex flex-col min-h-screen ${backgroundColor}`}>
       {!hideNavbarAndFooter && <Navbar />}
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
         {routes.map((route) => (
-            <Route
-              key={route.id}
-              path={route.path}
-              element={<route.component />}
-            />
-          ))}
+          <Route key={route.id} path={route.path} element={<route.component />} />
+        ))}
       </Routes>
       {!hideNavbarAndFooter && <Footer />}
     </div>

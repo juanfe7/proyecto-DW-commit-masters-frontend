@@ -4,6 +4,8 @@ import Footer from './components/Footer'
 import { routes } from './config/routes'
 import { BackgroundProvider, useBackground } from './context/BackgroundContext'
 import PrivateRoute from './components/PrivateRoute'
+import POS from './pages/POS'
+import InventarioRestaurante from './pages/InventarioRestaurante'
 
 const AppContent = () => {
   const { backgroundColor } = useBackground()
@@ -30,6 +32,9 @@ const AppContent = () => {
 
             return <Route key={route.id} path={route.path} element={element} />
           })}
+          {/* Rutas adicionales */}
+          <Route path="/pos" element={<POS />} />
+          <Route path="/pos/inventarioRestaurante" element={<InventarioRestaurante />} />
         </Routes>
       </main>
       <Footer />

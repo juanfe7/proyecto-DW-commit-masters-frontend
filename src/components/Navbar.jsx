@@ -1,4 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { logout } from '../utils/auth'
 
 const Navbar = () => {
   const location = useLocation()
@@ -7,10 +8,7 @@ const Navbar = () => {
   // Verificar si el usuario está en la sección de cliente
   const isClienteSection = location.pathname.startsWith('/cliente')
 
-  const handleLogout = () => {
-    navigate('/login') // Redirigir al usuario a /login
-  }
-
+  
   return (
     <nav className="bg-white text-white p-4 flex items-center justify-between">
       {/* Imagen en el lado izquierdo */}
@@ -76,7 +74,7 @@ const Navbar = () => {
           </>
         )}
         <button
-          onClick={handleLogout}
+          onClick={logout}
           className="bg-white px-3 py-2 rounded-lg hover:bg-[#E0EDFF] text-[#041D64] border border-[#041D64]"
         >
           Cerrar Sesión

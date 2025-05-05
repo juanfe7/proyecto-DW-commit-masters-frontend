@@ -1,7 +1,7 @@
 import { jwtDecode } from 'jwt-decode'
 
 export const getUserFromToken = () => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token')
   if (!token) return null
 
   try {
@@ -12,6 +12,7 @@ export const getUserFromToken = () => {
     if (decoded.exp < now) {
       // Token expirado
       localStorage.removeItem('token')
+      sessionStorage.removeItem('token')
       return null
     }
 
@@ -23,7 +24,9 @@ export const getUserFromToken = () => {
 }
 
 
+
 export const logout = () => {
-  localStorage.removeItem('token');
-  window.location.href = '/login'; // Redirige al login
-};
+  localStorage.removeItem('token')
+  sessionStorage.removeItem('token')
+  window.location.href = '/login'
+}

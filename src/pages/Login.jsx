@@ -1,64 +1,65 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import api from '../config/api' // ✅ AÑADIDO
 
 const Login = () => {
   const [usuario, setUsuario] = useState('')
   const [contraseña, setContraseña] = useState('')
-  const [errorContraseña, setErrorContraseña] = useState('')
+  const [error, setError] = useState('') // ✅ AÑADIDO
+  const [rememberMe, setRememberMe] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-
-    // Validar que la contraseña cumpla con los requisitos
-    const contraseñaRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
-
+    e.preventDefault();
     if (!usuario || !contraseña) {
-      alert('Por favor, completa todos los campos.')
-      return
+      alert('Por favor, completa todos los campos.');
+      return;
     }
-
-    if (!contraseñaRegex.test(contraseña)) {
-      setErrorContraseña(
-        'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un símbolo especial.'
-      )
-      return
-    }
-
+  
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: usuario,
-          password: contraseña,
-        }),
-      })
-
-      const data = await response.json()
+          password: contraseña
+        })
+      });
+  
+      const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || 'Error al iniciar sesión')
-        return
+        alert(data.error || 'Error al iniciar sesión');
+        return;
       }
 
-      localStorage.setItem('token', data.token)
+      if (response.ok) {
+        if (rememberMe) {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('rol', data.rol);
+        } else {
+          sessionStorage.setItem('token', data.token)
+          sessionStorage.setItem('rol', data.rol);
+        }
+      }
 
+  
+      // Redirigir según el rol
       if (data.rol === 'cliente') {
-        navigate('/cliente')
+        navigate('/cliente');
       } else if (data.rol === 'pos') {
-        navigate('/pos')
+        navigate('/pos');
       } else {
-        alert('Rol no reconocido.')
+        alert('Rol no reconocido.');
       }
     } catch (error) {
-      console.error('Error en el login:', error)
-      alert('Ocurrió un error al iniciar sesión.')
+      console.error('Error en el login:', error);
+      alert('Ocurrió un error al iniciar sesión.');
     }
-  }
+  };
+  
 
   const handleUsuarioChange = (e) => {
     const value = e.target.value
@@ -106,28 +107,25 @@ const Login = () => {
           <input
             type="password"
             value={contraseña}
-            onChange={(e) => {
-              setContraseña(e.target.value)
-              setErrorContraseña('') // Limpiar el mensaje de error al escribir
-            }}
+            onChange={(e) => setContraseña(e.target.value)}
             className="w-full px-3 py-2 rounded-[15px] bg-white text-black"
             placeholder="Contraseña"
             required
           />
-          {errorContraseña && (
-            <p className="text-red-500 text-sm mt-1">{errorContraseña}</p>
-          )}
         </div>
         <div className="mb-4 flex items-center">
           <input
             type="checkbox"
             id="recordar-sesion"
             className="mr-2 w-4 h-4"
+            checked={rememberMe}
+            onChange={() => setRememberMe(!rememberMe)}
           />
           <label htmlFor="recordar-sesion" className="text-sm text-white">
             Recordar Sesión
           </label>
         </div>
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* ✅ MOSTRAR ERROR */}
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"

@@ -8,26 +8,27 @@ const Navbar = () => {
   // Verificar si el usuario está en la sección de cliente
   const isClienteSection = location.pathname.startsWith('/cliente')
 
-  
+  // Verificar si el usuario está en la sección de POS
+  const isPOSSection = location.pathname.startsWith('/pos')
+
+  const handleLogoClick = () => {
+    if (isPOSSection) {
+      navigate('/pos')
+    } else if (isClienteSection) {
+      navigate('/cliente')
+    }
+  }
+
   return (
     <nav className="bg-white text-white p-4 flex items-center justify-between">
       {/* Imagen en el lado izquierdo */}
       <div className="flex items-center">
-        {isClienteSection ? (
-          <Link to="/cliente">
-            <img
-              src="/src/assets/logo_sabana_navbar.png"
-              alt="Logo"
-              className="w-42 h-auto mr-4 cursor-pointer"
-            />
-          </Link>
-        ) : (
-          <img
-            src="/src/assets/logo_sabana_navbar.png"
-            alt="Logo"
-            className="w-42 h-auto mr-4"
-          />
-        )}
+        <img
+          src="/src/assets/logo_sabana_navbar.png"
+          alt="Logo"
+          className="w-42 h-auto mr-4 cursor-pointer"
+          onClick={handleLogoClick}
+        />
       </div>
 
       {/* Input de búsqueda en el centro */}
@@ -59,7 +60,7 @@ const Navbar = () => {
               />
             </Link>
             <Link
-              to="/cliente/carrito" // Cambiado de /cliente/profile a /cliente/carrito
+              to="/cliente/carrito"
               className="bg-[#E0EDFF] px-2 py-2"
             >
               <img

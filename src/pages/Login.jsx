@@ -12,7 +12,7 @@ const Login = () => {
 
     // Validar que la contraseña cumpla con los requisitos
     const contraseñaRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{7,}$/ // Correcion momentanea para la contraseña, toca volver a añadir caracteres especiales
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/
 
     if (!usuario || !contraseña) {
       alert('Por favor, completa todos los campos.')
@@ -21,7 +21,7 @@ const Login = () => {
 
     if (!contraseñaRegex.test(contraseña)) {
       setErrorContraseña(
-        'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un símbolo especial.' 
+        'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un símbolo especial.'
       )
       return
     }

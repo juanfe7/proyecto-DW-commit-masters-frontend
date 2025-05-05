@@ -3,25 +3,34 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { routes } from './config/routes'
 import { BackgroundProvider, useBackground } from './context/BackgroundContext'
+import PrivateRoute from './components/PrivateRoute' 
 
 const AppContent = () => {
   const { backgroundColor } = useBackground()
   const location = useLocation()
 
-  const hideNavbar = location.pathname === '/login'
+  const hideNavbarAndFooter = location.pathname === '/login'
 
   return (
     <div className={`flex flex-col min-h-screen ${backgroundColor}`}>
-      {!hideNavbar && <Navbar />}
-      <main className="flex-grow overflow-auto">
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          {routes.map((route) => (
-            <Route key={route.id} path={route.path} element={<route.component />} />
-          ))}
-        </Routes>
-      </main>
-      <Footer />
+      {!hideNavbarAndFooter && <Navbar />}
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" />} />
+        {routes.map((route) => {
+          const isProtected = route.roles && route.roles.length > 0
+
+          const element = isProtected ? (
+            <PrivateRoute allowedRoles={route.roles}>
+              <route.component />
+            </PrivateRoute>
+          ) : (
+            <route.component />
+          )
+
+          return <Route key={route.id} path={route.path} element={element} />
+        })}
+      </Routes>
+      {!hideNavbarAndFooter && <Footer />}
     </div>
   )
 }

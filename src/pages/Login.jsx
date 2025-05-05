@@ -1,56 +1,64 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../config/api' // ✅ AÑADIDO
 
 const Login = () => {
   const [usuario, setUsuario] = useState('')
   const [contraseña, setContraseña] = useState('')
-  const [error, setError] = useState('') // ✅ AÑADIDO
+  const [errorContraseña, setErrorContraseña] = useState('')
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
+
+    // Validar que la contraseña cumpla con los requisitos
+    const contraseñaRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{7,}$/ // Correcion momentanea para la contraseña, toca volver a añadir caracteres especiales
+
     if (!usuario || !contraseña) {
-      alert('Por favor, completa todos los campos.');
-      return;
+      alert('Por favor, completa todos los campos.')
+      return
     }
-  
+
+    if (!contraseñaRegex.test(contraseña)) {
+      setErrorContraseña(
+        'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula, una minúscula, un número y un símbolo especial.' 
+      )
+      return
+    }
+
     try {
       const response = await fetch('http://localhost:3000/api/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: usuario,
-          password: contraseña
-        })
-      });
-  
-      const data = await response.json();
-  
+          password: contraseña,
+        }),
+      })
+
+      const data = await response.json()
+
       if (!response.ok) {
-        alert(data.error || 'Error al iniciar sesión');
-        return;
+        alert(data.error || 'Error al iniciar sesión')
+        return
       }
-  
-      // Guardar token (opcional)
-      localStorage.setItem('token', data.token);
-  
-      // Redirigir según el rol
+
+      localStorage.setItem('token', data.token)
+
       if (data.rol === 'cliente') {
-        navigate('/cliente');
+        navigate('/cliente')
       } else if (data.rol === 'pos') {
-        navigate('/pos');
+        navigate('/pos')
       } else {
-        alert('Rol no reconocido.');
+        alert('Rol no reconocido.')
       }
     } catch (error) {
-      console.error('Error en el login:', error);
-      alert('Ocurrió un error al iniciar sesión.');
+      console.error('Error en el login:', error)
+      alert('Ocurrió un error al iniciar sesión.')
     }
-  };
-  
+  }
 
   const handleUsuarioChange = (e) => {
     const value = e.target.value
@@ -98,11 +106,17 @@ const Login = () => {
           <input
             type="password"
             value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
+            onChange={(e) => {
+              setContraseña(e.target.value)
+              setErrorContraseña('') // Limpiar el mensaje de error al escribir
+            }}
             className="w-full px-3 py-2 rounded-[15px] bg-white text-black"
             placeholder="Contraseña"
             required
           />
+          {errorContraseña && (
+            <p className="text-red-500 text-sm mt-1">{errorContraseña}</p>
+          )}
         </div>
         <div className="mb-4 flex items-center">
           <input
@@ -114,7 +128,6 @@ const Login = () => {
             Recordar Sesión
           </label>
         </div>
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* ✅ MOSTRAR ERROR */}
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"

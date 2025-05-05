@@ -5,7 +5,10 @@ import POSProfile from '../pages/POSProfile'
 import Login from '../pages/Login'
 import Cliente from '../pages/Cliente'
 import POS from '../pages/POS'
+import Error403 from '../pages/Error403'
+import InventarioRestaurante from '../pages/InventarioRestaurante'
 import PrivateRoute from '../components/PrivateRoute'
+
 
 export const routes = [
   {
@@ -55,6 +58,20 @@ export const routes = [
     path: '/pos/profile',
     name: 'POS Profile',
     component: POSProfile,
+    roles: ['pos']
+  },
+  {
+    id: 'error-403',
+    path: '/403',
+    name: 'Acceso Denegado',
+    component: Error403,
+    roles: []
+  },
+  {
+    id: 'inventario-restaurante',
+    path: '/pos/inventarioRestaurante',
+    name: 'Inventario Restaurante',
+    component: InventarioRestaurante,
     roles: ['pos']
   }
 ]

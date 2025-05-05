@@ -49,7 +49,7 @@ const Cliente = () => {
           className="fixed inset-0 flex items-center justify-center z-50"
           onClick={closeModalOnClickOutside}
         >
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+          <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
             {/* Encabezado del modal */}
             <div className="flex justify-between items-center px-4 py-2 border-b-4 border-[#E0EDFF]">
               <h2 className="text-xl font-bold text-[#041D64]">Filtrar Productos</h2>
@@ -63,7 +63,51 @@ const Cliente = () => {
 
             {/* Contenido del modal */}
             <div className="mt-4">
-              <p className="text-gray-700 mb-4">Aquí puedes agregar opciones de filtro en el futuro.</p>
+              {/* Filtro por Categoría */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
+                <div className="flex items-center mb-2">
+                  <input type="checkbox" id="categoria-restaurante" className="mr-2" />
+                  <label htmlFor="categoria-restaurante" className="text-gray-700">
+                    Restaurante
+                  </label>
+                </div>
+                <div className="flex items-center mb-2">
+                  <input type="checkbox" id="categoria-cafeteria" className="mr-2" />
+                  <label htmlFor="categoria-cafeteria" className="text-gray-700">
+                    Cafetería
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input type="checkbox" id="categoria-menu" className="mr-2" />
+                  <label htmlFor="categoria-menu" className="text-gray-700">
+                    Menú del Día
+                  </label>
+                </div>
+              </div>
+
+              {/* Filtro por Precio */}
+              <div>
+                <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Precio</h3>
+                <div className="flex items-center mb-2">
+                  <input type="checkbox" id="precio-1" className="mr-2" />
+                  <label htmlFor="precio-1" className="text-gray-700">
+                    -$10,000
+                  </label>
+                </div>
+                <div className="flex items-center mb-2">
+                  <input type="checkbox" id="precio-2" className="mr-2" />
+                  <label htmlFor="precio-2" className="text-gray-700">
+                    $10,000 - $20,000
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <input type="checkbox" id="precio-3" className="mr-2" />
+                  <label htmlFor="precio-3" className="text-gray-700">
+                    $20,000+
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>

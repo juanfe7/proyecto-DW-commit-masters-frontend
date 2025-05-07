@@ -73,7 +73,7 @@ const Login = () => {
       <form onSubmit={handleLogin} className="bg-[#041D64] p-6 w-80">
         <div className="flex justify-center mb-4">
           <img
-            src="/src/assets/logo_login_sabana.png"
+            src="/logo_login_sabana.png" 
             alt="Logo Sabana"
             className="w-50 h-auto"
           />

@@ -24,7 +24,7 @@ const Navbar = () => {
       {/* Imagen en el lado izquierdo */}
       <div className="flex items-center">
         <img
-          src="/src/assets/logo_sabana_navbar.png"
+          src="/logo_sabana_navbar.png"
           alt="Logo"
           className="w-42 h-auto mr-4 cursor-pointer"
           onClick={handleLogoClick}
@@ -51,7 +51,7 @@ const Navbar = () => {
               className="bg-[#E0EDFF] px-2 py-2"
             >
               <img
-                src="/src/assets/receipt-svgrepo-com.svg"
+                src="/receipt-svgrepo-com.svg"
                 alt="Historial de Pedidos"
                 className="w-6 h-6"
                 style={{
@@ -64,7 +64,7 @@ const Navbar = () => {
               className="bg-[#E0EDFF] px-2 py-2"
             >
               <img
-                src="/src/assets/icon-add-to-cart.svg"
+                src="/icon-add-to-cart.svg"
                 alt="Carrito de Compras"
                 className="w-6 h-6"
                 style={{

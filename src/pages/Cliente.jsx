@@ -73,7 +73,13 @@ const Cliente = () => {
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
             <p className="text-sm text-gray-700">Ubicación: {producto.location}</p>
-            <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
+            <p
+              className={`text-sm font-medium ${
+                producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'
+              }`}
+            >
+              Stock: {producto.stock}
+            </p>
             <button
               onClick={() => abrirModalProducto(producto)}
               className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
@@ -188,8 +194,12 @@ const Cliente = () => {
                   <p>
                     <span className="font-semibold">Precio:</span> ${productoSeleccionado.price}
                   </p>
-                  <p>
-                    <span className="font-semibold">Stock:</span> {productoSeleccionado.stock}
+                  <p
+                    className={`font-semibold ${
+                      productoSeleccionado.stock <= 10 ? 'text-red-500' : 'text-gray-700'
+                    }`}
+                  >
+                    Stock: {productoSeleccionado.stock}
                   </p>
                 </div>
               </div>

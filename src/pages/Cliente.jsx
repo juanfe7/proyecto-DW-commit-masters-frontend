@@ -53,7 +53,7 @@ const Cliente = () => {
   }, [])
 
   return (
-    <div className={`min-h-screen ${isModalOpen ? 'bg-black bg-opacity-50' : 'bg-white'} text-[#041D64]`}>
+    <div className="min-h-screen bg-white text-[#041D64]">
       {/* Encabezado */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Productos Disponibles</h1>
@@ -99,7 +99,7 @@ const Cliente = () => {
       {isModalOpen && (
         <div
           id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-5"
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
@@ -154,7 +154,7 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-5"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()
           }}

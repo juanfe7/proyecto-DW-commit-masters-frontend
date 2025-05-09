@@ -38,7 +38,7 @@ const Cliente = () => {
 
   return (
     <div className="h-screen bg-white text-[#041D64]">
-      {/* Contenedor debajo del Navbar */}
+      {/* Encabezado */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Productos Disponibles</h1>
         <button
@@ -57,8 +57,9 @@ const Cliente = () => {
               <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
-            <p className="text-sm text-gray-700">{producto.category}</p>
-            <p className="text-sm text-gray-700">${producto.price}</p>
+            <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
+            <p className="text-sm text-gray-700">Ubicación: {producto.location}</p>
+            <p className="text-sm text-gray-700">Stock: {producto.stock}</p>
             <button className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]">
               Ver
             </button>
@@ -66,7 +67,7 @@ const Cliente = () => {
         ))}
       </div>
 
-      {/* Modal */}
+      {/* Modal de filtros */}
       {isModalOpen && (
         <div
           id="modal-background"
@@ -74,7 +75,6 @@ const Cliente = () => {
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
-            {/* Encabezado del modal */}
             <div className="flex justify-between items-center px-4 py-2 border-b-4 border-[#E0EDFF]">
               <h2 className="text-xl font-bold text-[#041D64]">Filtrar Productos</h2>
               <button
@@ -85,7 +85,6 @@ const Cliente = () => {
               </button>
             </div>
 
-            {/* Contenido del modal */}
             <div className="mt-4">
               {/* Filtro por Categoría */}
               <div className="mb-6">

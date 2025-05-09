@@ -149,42 +149,67 @@ const Cliente = () => {
           }}
           id="modal-info-bg"
         >
-          <div className="bg-white p-6 rounded-xl shadow-2xl max-w-3xl w-full flex">
-            {/* Imagen a la izquierda */}
-            <div className="w-1/2 pr-4">
-              <img
-                src={productoSeleccionado.image}
-                alt={productoSeleccionado.name}
-                className="w-full h-64 object-cover rounded-lg"
-              />
-            </div>
-
-            {/* Información a la derecha */}
-            <div className="w-1/2 flex flex-col justify-between">
-              <div>
-                <h2 className="text-2xl font-bold mb-4 text-[#041D64]">Información Producto</h2>
-                <p>
-                  <span className="font-semibold">Nombre:</span> {productoSeleccionado.name}
-                </p>
-                <p>
-                  <span className="font-semibold">Categoría:</span>{' '}
-                  {capitalizeFirstLetter(productoSeleccionado.category)}
-                </p>
-                <p>
-                  <span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}
-                </p>
-                <p>
-                  <span className="font-semibold">Precio:</span> ${productoSeleccionado.price}
-                </p>
-                <p>
-                  <span className="font-semibold">Stock:</span> {productoSeleccionado.stock}
-                </p>
-              </div>
+          <div className="bg-white p-6 rounded-xl shadow-2xl max-w-3xl w-full flex flex-col">
+            {/* Encabezado del modal */}
+            <div className="flex justify-between items-center border-b-2 border-[#E0EDFF] pb-4 mb-4">
+              <h2 className="text-2xl font-bold text-[#041D64]">Información Producto</h2>
               <button
                 onClick={cerrarModalProducto}
-                className="mt-6 self-start bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+                className="text-[#041D64] text-2xl font-bold hover:text-blue-600"
               >
-                Cerrar
+                X
+              </button>
+            </div>
+
+            {/* Contenido del modal */}
+            <div className="flex">
+              {/* Imagen a la izquierda */}
+              <div className="w-1/2 pr-4">
+                <img
+                  src={productoSeleccionado.image}
+                  alt={productoSeleccionado.name}
+                  className="w-full h-64 object-cover rounded-lg"
+                />
+              </div>
+
+              {/* Información a la derecha */}
+              <div className="w-1/2 flex flex-col justify-between">
+                <div>
+                  <p>
+                    <span className="font-semibold">Nombre:</span> {productoSeleccionado.name}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Categoría:</span>{' '}
+                    {capitalizeFirstLetter(productoSeleccionado.category)}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Precio:</span> ${productoSeleccionado.price}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Stock:</span> {productoSeleccionado.stock}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Espacio para input y botón */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-[#041D64] mb-2">
+                Cantidad
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Ingrese cantidad"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
+              />
+              <button
+                className="mt-4 w-full bg-[#041D64] text-white py-2 rounded-lg hover:bg-[#193F9E]"
+              >
+                Añadir al Carrito
               </button>
             </div>
           </div>

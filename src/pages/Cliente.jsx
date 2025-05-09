@@ -5,72 +5,108 @@ const Cliente = () => {
   const [productos, setProductos] = useState([])
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
 
-  // Estados para filtros
+  // Estados de filtros
   const [filtroPrecio, setFiltroPrecio] = useState({
     menos10000: false,
     entre10000y20000: false,
     mas20000: false,
   })
 
-  const toggleModalFiltro = () => {
-    setIsModalOpen(!isModalOpen)
-  }
+  const [filtroCategoria, setFiltroCategoria] = useState({
+    comida: false,
+    bebida: false,
+  })
 
+  const [ubicacion, setUbicacion] = useState('')
+
+  const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {
-    if (e.target.id === 'modal-background') {
-      setIsModalOpen(false)
-    }
+    if (e.target.id === 'modal-background') setIsModalOpen(false)
   }
 
-  const abrirModalProducto = (producto) => {
-    setProductoSeleccionado(producto)
-  }
-
-  const cerrarModalProducto = () => {
-    setProductoSeleccionado(null)
-  }
+  const abrirModalProducto = (producto) => setProductoSeleccionado(producto)
+  const cerrarModalProducto = () => setProductoSeleccionado(null)
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
-  // Fetch de productos con filtros
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      const queryStrings = []
 
-      const queryParams = []
+      // Categoría: se permiten múltiples
+      const categorias = []
+      if (filtroCategoria.comida) categorias.push('comida')
+      if (filtroCategoria.bebida) categorias.push('bebida')
 
-      // Construir condiciones de filtro según los checkboxes
-      if (filtroPrecio.menos10000) {
-        queryParams.push('maxPrice=9999')
-      }
-      if (filtroPrecio.entre10000y20000) {
-        queryParams.push('minPrice=10000&maxPrice=20000')
-      }
-      if (filtroPrecio.mas20000) {
-        queryParams.push('minPrice=20001')
+      // Ubicación
+      if (ubicacion.trim() !== '') {
+        queryStrings.push(`location=${encodeURIComponent(ubicacion)}`)
       }
 
-      // Combinar múltiples rangos correctamente
-      const fetches = queryParams.length > 0
-        ? await Promise.all(
-            queryParams.map(param =>
-              fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${param}`, {
-                headers: { Authorization: `Bearer ${token}` }
+      // Precios
+      const priceRanges = []
+      if (filtroPrecio.menos10000) priceRanges.push({ maxPrice: 9999 })
+      if (filtroPrecio.entre10000y20000) priceRanges.push({ minPrice: 10000, maxPrice: 20000 })
+      if (filtroPrecio.mas20000) priceRanges.push({ minPrice: 20001 })
+
+      let responses = []
+
+      // Para cada combinación de categoría y rango de precio
+      if (categorias.length > 0 && priceRanges.length > 0) {
+        responses = await Promise.all(
+          categorias.flatMap(cat =>
+            priceRanges.map(rango => {
+              const parts = [`category=${cat}`]
+              if (rango.minPrice) parts.push(`minPrice=${rango.minPrice}`)
+              if (rango.maxPrice) parts.push(`maxPrice=${rango.maxPrice}`)
+              if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
+              const query = parts.join('&')
+              return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
+                headers: { Authorization: `Bearer ${token}` },
               }).then(res => res.json())
-            )
+            })
           )
-        : [
-            await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/products', {
-              headers: { Authorization: `Bearer ${token}` }
+        )
+      } else if (categorias.length > 0) {
+        responses = await Promise.all(
+          categorias.map(cat => {
+            const parts = [`category=${cat}`]
+            if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
+            const query = parts.join('&')
+            return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
+              headers: { Authorization: `Bearer ${token}` },
             }).then(res => res.json())
-          ]
+          })
+        )
+      } else if (priceRanges.length > 0) {
+        responses = await Promise.all(
+          priceRanges.map(rango => {
+            const parts = []
+            if (rango.minPrice) parts.push(`minPrice=${rango.minPrice}`)
+            if (rango.maxPrice) parts.push(`maxPrice=${rango.maxPrice}`)
+            if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
+            const query = parts.join('&')
+            return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }).then(res => res.json())
+          })
+        )
+      } else {
+        // Sin filtros, solo ubicación si existe
+        const query = ubicacion.trim() !== '' ? `location=${encodeURIComponent(ubicacion)}` : ''
+        const res = await fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        responses = [await res.json()]
+      }
 
-      // Combinar y eliminar duplicados
-      const combined = [].concat(...fetches)
-      const unique = Array.from(new Map(combined.map(p => [p.id, p])).values())
-      setProductos(unique)
+      // Unir y eliminar duplicados
+      const todos = responses.flat()
+      const unicos = Array.from(new Map(todos.map(p => [p.id, p])).values())
+      setProductos(unicos)
     } catch (error) {
       console.error('Error al obtener productos:', error)
     }
@@ -78,12 +114,20 @@ const Cliente = () => {
 
   useEffect(() => {
     fetchProductos()
-  }, [filtroPrecio]) // Se actualiza cuando cambian los filtros
+  }, [filtroPrecio, filtroCategoria, ubicacion])
 
-  // Manejo del cambio de cada checkbox
-  const handleCheckboxChange = (e) => {
+  const handlePrecioChange = (e) => {
     const { name, checked } = e.target
     setFiltroPrecio(prev => ({ ...prev, [name]: checked }))
+  }
+
+  const handleCategoriaChange = (e) => {
+    const { name, checked } = e.target
+    setFiltroCategoria(prev => ({ ...prev, [name]: checked }))
+  }
+
+  const handleUbicacionChange = (e) => {
+    setUbicacion(e.target.value)
   }
 
   return (
@@ -112,11 +156,7 @@ const Cliente = () => {
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
             <p className="text-sm text-gray-700">Ubicación: {producto.location}</p>
-            <p
-              className={`text-sm font-medium ${
-                producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'
-              }`}
-            >
+            <p className={`text-sm font-medium ${producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
               Stock: {producto.stock}
             </p>
             <button
@@ -129,7 +169,7 @@ const Cliente = () => {
         ))}
       </div>
 
-      {/* Modal de filtro */}
+      {/* Modal de filtros */}
       {isModalOpen && (
         <div
           id="modal-background"
@@ -137,50 +177,38 @@ const Cliente = () => {
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
-            <div className="flex justify-between items-center px-4 py-2 border-b-4 border-[#E0EDFF]">
+            <div className="flex justify-between items-center border-b-4 border-[#E0EDFF] pb-2">
               <h2 className="text-xl font-bold text-[#041D64]">Filtrar Productos</h2>
               <button
                 onClick={toggleModalFiltro}
-                className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+                className="bg-[#041D64] text-white px-3 py-1 rounded-lg hover:bg-[#193F9E]"
               >
                 Cerrar
               </button>
             </div>
 
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Precio</h3>
-              <div className="flex flex-col gap-2 text-gray-700">
-                <label>
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    name="menos10000"
-                    checked={filtroPrecio.menos10000}
-                    onChange={handleCheckboxChange}
-                  />
-                  -$10,000
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    name="entre10000y20000"
-                    checked={filtroPrecio.entre10000y20000}
-                    onChange={handleCheckboxChange}
-                  />
-                  $10,000 - $20,000
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    className="mr-2"
-                    name="mas20000"
-                    checked={filtroPrecio.mas20000}
-                    onChange={handleCheckboxChange}
-                  />
-                  $20,000+
-                </label>
+            <div className="mt-4 text-gray-700">
+              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
+              <div className="flex flex-col gap-2">
+                <label><input type="checkbox" className="mr-2" name="comida" checked={filtroCategoria.comida} onChange={handleCategoriaChange}/>Comida</label>
+                <label><input type="checkbox" className="mr-2" name="bebida" checked={filtroCategoria.bebida} onChange={handleCategoriaChange}/>Bebida</label>
               </div>
+
+              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
+              <div className="flex flex-col gap-2">
+                <label><input type="checkbox" className="mr-2" name="menos10000" checked={filtroPrecio.menos10000} onChange={handlePrecioChange}/>-$10,000</label>
+                <label><input type="checkbox" className="mr-2" name="entre10000y20000" checked={filtroPrecio.entre10000y20000} onChange={handlePrecioChange}/>$10,000 - $20,000</label>
+                <label><input type="checkbox" className="mr-2" name="mas20000" checked={filtroPrecio.mas20000} onChange={handlePrecioChange}/>$20,000+</label>
+              </div>
+
+              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Ubicación</h3>
+              <input
+                type="text"
+                value={ubicacion}
+                onChange={handleUbicacionChange}
+                placeholder="Ej: Embarcadero"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
+              />
             </div>
           </div>
         </div>

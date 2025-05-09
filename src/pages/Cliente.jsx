@@ -23,27 +23,32 @@ const Cliente = () => {
     setProductoSeleccionado(null)
   }
 
+  // Función para capitalizar la primera letra
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+  }
+
   useEffect(() => {
     const fetchProductos = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
         const response = await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/products', {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
-        });
+        })
 
-        if (!response.ok) throw new Error('Error al obtener productos');
+        if (!response.ok) throw new Error('Error al obtener productos')
 
-        const data = await response.json();
-        setProductos(data);
+        const data = await response.json()
+        setProductos(data)
       } catch (error) {
-        console.error('Error al obtener productos:', error);
+        console.error('Error al obtener productos:', error)
       }
-    };
+    }
 
-    fetchProductos();
-  }, []);
+    fetchProductos()
+  }, [])
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
@@ -83,7 +88,7 @@ const Cliente = () => {
       {isModalOpen && (
         <div
           id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
+          className="fixed inset-0 flex items-center justify-center z-50"
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
@@ -97,20 +102,38 @@ const Cliente = () => {
               </button>
             </div>
 
-            {/* Opciones de filtro (sin funcionalidad aún) */}
+            {/* Opciones de filtro */}
             <div className="mt-4">
               <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
               <div className="flex flex-col gap-2 text-gray-700">
-                <label><input type="checkbox" className="mr-2" />Restaurante</label>
-                <label><input type="checkbox" className="mr-2" />Cafetería</label>
-                <label><input type="checkbox" className="mr-2" />Menú del Día</label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  Restaurante
+                </label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  Cafetería
+                </label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  Menú del Día
+                </label>
               </div>
 
               <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
               <div className="flex flex-col gap-2 text-gray-700">
-                <label><input type="checkbox" className="mr-2" />-$10,000</label>
-                <label><input type="checkbox" className="mr-2" />$10,000 - $20,000</label>
-                <label><input type="checkbox" className="mr-2" />$20,000+</label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  -$10,000
+                </label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  $10,000 - $20,000
+                </label>
+                <label>
+                  <input type="checkbox" className="mr-2" />
+                  $20,000+
+                </label>
               </div>
             </div>
           </div>
@@ -120,7 +143,7 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
+          className="fixed inset-0 flex items-center justify-center z-50"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()
           }}
@@ -140,11 +163,22 @@ const Cliente = () => {
             <div className="w-1/2 flex flex-col justify-between">
               <div>
                 <h2 className="text-2xl font-bold mb-4 text-[#041D64]">Información Producto</h2>
-                <p><span className="font-semibold">Nombre:</span> {productoSeleccionado.name}</p>
-                <p><span className="font-semibold">Categoría:</span> {productoSeleccionado.category}</p>
-                <p><span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}</p>
-                <p><span className="font-semibold">Precio:</span> ${productoSeleccionado.price}</p>
-                <p><span className="font-semibold">Stock:</span> {productoSeleccionado.stock}</p>
+                <p>
+                  <span className="font-semibold">Nombre:</span> {productoSeleccionado.name}
+                </p>
+                <p>
+                  <span className="font-semibold">Categoría:</span>{' '}
+                  {capitalizeFirstLetter(productoSeleccionado.category)}
+                </p>
+                <p>
+                  <span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}
+                </p>
+                <p>
+                  <span className="font-semibold">Precio:</span> ${productoSeleccionado.price}
+                </p>
+                <p>
+                  <span className="font-semibold">Stock:</span> {productoSeleccionado.stock}
+                </p>
               </div>
               <button
                 onClick={cerrarModalProducto}

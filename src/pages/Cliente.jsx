@@ -17,10 +17,12 @@ const Cliente = () => {
 
   const abrirModalProducto = (producto) => {
     setProductoSeleccionado(producto)
+    setIsModalOpen(true)
   }
 
   const cerrarModalProducto = () => {
     setProductoSeleccionado(null)
+    setIsModalOpen(false)
   }
 
   // Función para capitalizar la primera letra
@@ -51,7 +53,7 @@ const Cliente = () => {
   }, [])
 
   return (
-    <div className="min-h-screen bg-white text-[#041D64]">
+    <div className={`min-h-screen ${isModalOpen ? 'bg-black bg-opacity-50' : 'bg-white'} text-[#041D64]`}>
       {/* Encabezado */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Productos Disponibles</h1>
@@ -67,7 +69,10 @@ const Cliente = () => {
       <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
-            <div className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden">
+            <div
+              className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+              onClick={() => abrirModalProducto(producto)}
+            >
               <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>

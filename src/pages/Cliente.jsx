@@ -59,7 +59,7 @@ const Cliente = () => {
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
             <p className="text-sm text-gray-700">{producto.category}</p>
             <p className="text-sm text-gray-700">${producto.price}</p>
-            <button className="mt-2 bg-[#640404] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]">
+            <button className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]">
               Ver
             </button>
           </div>

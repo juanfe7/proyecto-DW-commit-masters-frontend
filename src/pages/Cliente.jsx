@@ -173,7 +173,7 @@ const Cliente = () => {
       {isModalOpen && (
         <div
           id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
+          className="fixed inset-0 flex items-center justify-center z-50"
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
@@ -217,7 +217,7 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
+          className="fixed inset-0 flex items-center justify-center z-50"
           id="modal-info-bg"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()

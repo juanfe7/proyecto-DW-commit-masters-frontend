@@ -5,6 +5,13 @@ const Cliente = () => {
   const [productos, setProductos] = useState([])
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
 
+  // Estados para filtros
+  const [filtroPrecio, setFiltroPrecio] = useState({
+    menos10000: false,
+    entre10000y20000: false,
+    mas20000: false,
+  })
+
   const toggleModalFiltro = () => {
     setIsModalOpen(!isModalOpen)
   }
@@ -17,40 +24,67 @@ const Cliente = () => {
 
   const abrirModalProducto = (producto) => {
     setProductoSeleccionado(producto)
-    setIsModalOpen(true)
   }
 
   const cerrarModalProducto = () => {
     setProductoSeleccionado(null)
-    setIsModalOpen(false)
   }
 
-  // Función para capitalizar la primera letra
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
-  useEffect(() => {
-    const fetchProductos = async () => {
-      try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-        const response = await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/products', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+  // Fetch de productos con filtros
+  const fetchProductos = async () => {
+    try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
-        if (!response.ok) throw new Error('Error al obtener productos')
+      const queryParams = []
 
-        const data = await response.json()
-        setProductos(data)
-      } catch (error) {
-        console.error('Error al obtener productos:', error)
+      // Construir condiciones de filtro según los checkboxes
+      if (filtroPrecio.menos10000) {
+        queryParams.push('maxPrice=9999')
       }
-    }
+      if (filtroPrecio.entre10000y20000) {
+        queryParams.push('minPrice=10000&maxPrice=20000')
+      }
+      if (filtroPrecio.mas20000) {
+        queryParams.push('minPrice=20001')
+      }
 
+      // Combinar múltiples rangos correctamente
+      const fetches = queryParams.length > 0
+        ? await Promise.all(
+            queryParams.map(param =>
+              fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${param}`, {
+                headers: { Authorization: `Bearer ${token}` }
+              }).then(res => res.json())
+            )
+          )
+        : [
+            await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/products', {
+              headers: { Authorization: `Bearer ${token}` }
+            }).then(res => res.json())
+          ]
+
+      // Combinar y eliminar duplicados
+      const combined = [].concat(...fetches)
+      const unique = Array.from(new Map(combined.map(p => [p.id, p])).values())
+      setProductos(unique)
+    } catch (error) {
+      console.error('Error al obtener productos:', error)
+    }
+  }
+
+  useEffect(() => {
     fetchProductos()
-  }, [])
+  }, [filtroPrecio]) // Se actualiza cuando cambian los filtros
+
+  // Manejo del cambio de cada checkbox
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target
+    setFiltroPrecio(prev => ({ ...prev, [name]: checked }))
+  }
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
@@ -99,7 +133,7 @@ const Cliente = () => {
       {isModalOpen && (
         <div
           id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
           onClick={closeModalOnClickOutside}
         >
           <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
@@ -113,36 +147,37 @@ const Cliente = () => {
               </button>
             </div>
 
-            {/* Opciones de filtro */}
             <div className="mt-4">
-              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
+              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Precio</h3>
               <div className="flex flex-col gap-2 text-gray-700">
                 <label>
-                  <input type="checkbox" className="mr-2" />
-                  Restaurante
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  Cafetería
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  Menú del Día
-                </label>
-              </div>
-
-              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
-              <div className="flex flex-col gap-2 text-gray-700">
-                <label>
-                  <input type="checkbox" className="mr-2" />
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    name="menos10000"
+                    checked={filtroPrecio.menos10000}
+                    onChange={handleCheckboxChange}
+                  />
                   -$10,000
                 </label>
                 <label>
-                  <input type="checkbox" className="mr-2" />
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    name="entre10000y20000"
+                    checked={filtroPrecio.entre10000y20000}
+                    onChange={handleCheckboxChange}
+                  />
                   $10,000 - $20,000
                 </label>
                 <label>
-                  <input type="checkbox" className="mr-2" />
+                  <input
+                    type="checkbox"
+                    className="mr-2"
+                    name="mas20000"
+                    checked={filtroPrecio.mas20000}
+                    onChange={handleCheckboxChange}
+                  />
                   $20,000+
                 </label>
               </div>
@@ -154,14 +189,13 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30"
+          id="modal-info-bg"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()
           }}
-          id="modal-info-bg"
         >
           <div className="bg-white p-6 rounded-xl shadow-2xl max-w-3xl w-full flex flex-col">
-            {/* Encabezado del modal */}
             <div className="flex justify-between items-center border-b-2 border-[#E0EDFF] pb-4 mb-4">
               <h2 className="text-2xl font-bold text-[#041D64]">Información Producto</h2>
               <button
@@ -172,9 +206,7 @@ const Cliente = () => {
               </button>
             </div>
 
-            {/* Contenido del modal */}
             <div className="flex">
-              {/* Imagen a la izquierda */}
               <div className="w-1/2 pr-4">
                 <img
                   src={productoSeleccionado.image}
@@ -183,38 +215,21 @@ const Cliente = () => {
                 />
               </div>
 
-              {/* Información a la derecha */}
               <div className="w-1/2 flex flex-col justify-between">
                 <div>
-                  <p>
-                    <span className="font-semibold">Nombre:</span> {productoSeleccionado.name}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Categoría:</span>{' '}
-                    {capitalizeFirstLetter(productoSeleccionado.category)}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Precio:</span> ${productoSeleccionado.price}
-                  </p>
-                  <p
-                    className={`font-semibold ${
-                      productoSeleccionado.stock <= 10 ? 'text-red-500' : 'text-gray-700'
-                    }`}
-                  >
+                  <p><span className="font-semibold">Nombre:</span> {productoSeleccionado.name}</p>
+                  <p><span className="font-semibold">Categoría:</span> {capitalizeFirstLetter(productoSeleccionado.category)}</p>
+                  <p><span className="font-semibold">Ubicación:</span> {productoSeleccionado.location}</p>
+                  <p><span className="font-semibold">Precio:</span> ${productoSeleccionado.price}</p>
+                  <p className={`font-semibold ${productoSeleccionado.stock <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
                     Stock: {productoSeleccionado.stock}
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* Espacio para input y botón */}
             <div className="mt-6">
-              <label className="block text-sm font-medium text-[#041D64] mb-2">
-                Cantidad
-              </label>
+              <label className="block text-sm font-medium text-[#041D64] mb-2">Cantidad</label>
               <input
                 type="number"
                 min="1"

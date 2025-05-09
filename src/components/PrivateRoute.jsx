@@ -7,16 +7,16 @@ const PrivateRoute = ({ children, allowedRoles }) => {
   console.log('Allowed roles:', allowedRoles)
 
   if (user === undefined) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/403" />
   }
 
 
   if (!user) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/403" />
   }
 
   if (!allowedRoles.includes(user.role)) {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/403" />
   }
 
   return children

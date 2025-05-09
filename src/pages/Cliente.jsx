@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react'
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productos, setProductos] = useState([])
+  const [productosFiltrados, setProductosFiltrados] = useState([]) // Estado para los productos filtrados
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
+  const [filtroUbicacion, setFiltroUbicacion] = useState('') // Estado para el filtro de ubicación
 
   const toggleModalFiltro = () => {
     setIsModalOpen(!isModalOpen)
@@ -30,6 +32,26 @@ const Cliente = () => {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
+  // Función para manejar el filtro de ubicación
+  const handleFiltroUbicacion = (e) => {
+    const value = e.target.value
+    setFiltroUbicacion(value)
+  }
+
+  const aplicarFiltro = (e) => {
+    e.preventDefault()
+    if (filtroUbicacion.trim() === '') {
+      // Si el input está vacío, mostrar todos los productos
+      setProductosFiltrados(productos)
+    } else {
+      // Filtrar productos por ubicación ignorando mayúsculas y minúsculas
+      const productosFiltrados = productos.filter((producto) =>
+        producto.location.toLowerCase().includes(filtroUbicacion.toLowerCase())
+      )
+      setProductosFiltrados(productosFiltrados)
+    }
+  }
+
   useEffect(() => {
     const fetchProductos = async () => {
       try {
@@ -44,6 +66,7 @@ const Cliente = () => {
 
         const data = await response.json()
         setProductos(data)
+        setProductosFiltrados(data) // Inicialmente mostrar todos los productos
       } catch (error) {
         console.error('Error al obtener productos:', error)
       }
@@ -54,20 +77,29 @@ const Cliente = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
-      {/* Encabezado */}
+      {/* Navbar con el input de búsqueda */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Productos Disponibles</h1>
-        <button
-          onClick={toggleModalFiltro}
-          className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
-        >
-          Filtrar Productos
-        </button>
+        <form onSubmit={aplicarFiltro} className="flex items-center">
+          <input
+            type="text"
+            value={filtroUbicacion}
+            onChange={handleFiltroUbicacion}
+            placeholder="Buscar por ubicación..."
+            className="w-64 px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#041D64]"
+          />
+          <button
+            type="submit"
+            className="ml-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+          >
+            Buscar
+          </button>
+        </form>
       </div>
 
       {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
-        {productos.map((producto) => (
+        {productosFiltrados.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
             <div
               className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
@@ -94,62 +126,6 @@ const Cliente = () => {
           </div>
         ))}
       </div>
-
-      {/* Modal de filtro */}
-      {isModalOpen && (
-        <div
-          id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50"
-          onClick={closeModalOnClickOutside}
-        >
-          <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
-            <div className="flex justify-between items-center px-4 py-2 border-b-4 border-[#E0EDFF]">
-              <h2 className="text-xl font-bold text-[#041D64]">Filtrar Productos</h2>
-              <button
-                onClick={toggleModalFiltro}
-                className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
-              >
-                Cerrar
-              </button>
-            </div>
-
-            {/* Opciones de filtro */}
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
-              <div className="flex flex-col gap-2 text-gray-700">
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  Restaurante
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  Cafetería
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  Menú del Día
-                </label>
-              </div>
-
-              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
-              <div className="flex flex-col gap-2 text-gray-700">
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  -$10,000
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  $10,000 - $20,000
-                </label>
-                <label>
-                  <input type="checkbox" className="mr-2" />
-                  $20,000+
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Modal de información del producto */}
       {productoSeleccionado && (

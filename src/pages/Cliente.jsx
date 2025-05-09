@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [productos, setProductos] = useState([])
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen)
@@ -12,6 +13,28 @@ const Cliente = () => {
       setIsModalOpen(false)
     }
   }
+
+  useEffect(() => {
+    const fetchProductos = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        const response = await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/products', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) throw new Error('Error al obtener productos');
+
+        const data = await response.json();
+        setProductos(data);
+      } catch (error) {
+        console.error('Error al obtener productos:', error);
+      }
+    };
+
+    fetchProductos();
+  }, []);
 
   return (
     <div className="h-screen bg-white text-[#041D64]">
@@ -28,14 +51,15 @@ const Cliente = () => {
 
       {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
-        {Array.from({ length: 9 }).map((_, index) => (
-          <div key={index} className="flex flex-col items-center">
-            {/* Espacio para la imagen o detalles del producto */}
-            <div className="w-3/4 h-60 bg-gray-200 rounded-lg flex items-center justify-center">
-              <p className="text-gray-500">Imagen del Producto</p>
+        {productos.map((producto) => (
+          <div key={producto.id} className="flex flex-col items-center">
+            <div className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden">
+              <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
-            {/* Botón Ver */}
-            <button className="mt-4 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]">
+            <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
+            <p className="text-sm text-gray-700">{producto.category}</p>
+            <p className="text-sm text-gray-700">${producto.price}</p>
+            <button className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]">
               Ver
             </button>
           </div>

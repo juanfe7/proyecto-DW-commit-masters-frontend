@@ -205,13 +205,24 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()
           }}
           id="modal-info-bg"
         >
           <div className="bg-white p-6 rounded-xl shadow-2xl max-w-3xl w-full flex flex-col">
+            {/* Encabezado del modal */}
+            <div className="flex justify-between items-center border-b-2 border-[#E0EDFF] pb-4 mb-4">
+              <h2 className="text-2xl font-bold text-[#041D64]">Información Producto</h2>
+              <button
+                onClick={cerrarModalProducto}
+                className="text-[#041D64] text-2xl font-bold hover:text-blue-600"
+              >
+                X
+              </button>
+            </div>
+
             {/* Contenido del modal */}
             <div className="flex">
               {/* Imagen a la izquierda */}

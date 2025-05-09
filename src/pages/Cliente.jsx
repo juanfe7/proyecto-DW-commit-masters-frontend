@@ -3,13 +3,7 @@ import { useState, useEffect } from 'react'
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productos, setProductos] = useState([])
-  const [productosFiltrados, setProductosFiltrados] = useState([]) // Estado para los productos filtrados
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
-  const [filtrosPrecio, setFiltrosPrecio] = useState({
-    menosDe10000: false,
-    entre10000y20000: false,
-    masDe20000: false,
-  }) // Estado para los checkboxes de precio
 
   const toggleModalFiltro = () => {
     setIsModalOpen(!isModalOpen)
@@ -23,39 +17,17 @@ const Cliente = () => {
 
   const abrirModalProducto = (producto) => {
     setProductoSeleccionado(producto)
+    setIsModalOpen(true)
   }
 
   const cerrarModalProducto = () => {
     setProductoSeleccionado(null)
+    setIsModalOpen(false)
   }
 
-  // Función para manejar los cambios en los checkboxes
-  const handleFiltroPrecioChange = (e) => {
-    const { name, checked } = e.target
-    setFiltrosPrecio((prev) => ({
-      ...prev,
-      [name]: checked,
-    }))
-  }
-
-  // Función para aplicar los filtros de precio
-  const aplicarFiltros = () => {
-    const { menosDe10000, entre10000y20000, masDe20000 } = filtrosPrecio
-
-    if (!menosDe10000 && !entre10000y20000 && !masDe20000) {
-      // Si no hay filtros seleccionados, mostrar todos los productos
-      setProductosFiltrados(productos)
-      return
-    }
-
-    const productosFiltrados = productos.filter((producto) => {
-      if (menosDe10000 && producto.price < 10000) return true
-      if (entre10000y20000 && producto.price >= 10000 && producto.price <= 20000) return true
-      if (masDe20000 && producto.price > 20000) return true
-      return false
-    })
-
-    setProductosFiltrados(productosFiltrados)
+  // Función para capitalizar la primera letra
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
   useEffect(() => {
@@ -72,7 +44,6 @@ const Cliente = () => {
 
         const data = await response.json()
         setProductos(data)
-        setProductosFiltrados(data) // Inicialmente mostrar todos los productos
       } catch (error) {
         console.error('Error al obtener productos:', error)
       }
@@ -80,10 +51,6 @@ const Cliente = () => {
 
     fetchProductos()
   }, [])
-
-  useEffect(() => {
-    aplicarFiltros() // Aplicar filtros cada vez que cambien los checkboxes
-  }, [filtrosPrecio, productos])
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
@@ -100,7 +67,7 @@ const Cliente = () => {
 
       {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
-        {productosFiltrados.map((producto) => (
+        {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
             <div
               className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
@@ -167,33 +134,15 @@ const Cliente = () => {
               <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
               <div className="flex flex-col gap-2 text-gray-700">
                 <label>
-                  <input
-                    type="checkbox"
-                    name="menosDe10000"
-                    checked={filtrosPrecio.menosDe10000}
-                    onChange={handleFiltroPrecioChange}
-                    className="mr-2"
-                  />
+                  <input type="checkbox" className="mr-2" />
                   -$10,000
                 </label>
                 <label>
-                  <input
-                    type="checkbox"
-                    name="entre10000y20000"
-                    checked={filtrosPrecio.entre10000y20000}
-                    onChange={handleFiltroPrecioChange}
-                    className="mr-2"
-                  />
+                  <input type="checkbox" className="mr-2" />
                   $10,000 - $20,000
                 </label>
                 <label>
-                  <input
-                    type="checkbox"
-                    name="masDe20000"
-                    checked={filtrosPrecio.masDe20000}
-                    onChange={handleFiltroPrecioChange}
-                    className="mr-2"
-                  />
+                  <input type="checkbox" className="mr-2" />
                   $20,000+
                 </label>
               </div>
@@ -205,7 +154,7 @@ const Cliente = () => {
       {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
-          className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+          className="fixed inset-0 flex items-center justify-center z-50"
           onClick={(e) => {
             if (e.target.id === 'modal-info-bg') cerrarModalProducto()
           }}
@@ -259,6 +208,24 @@ const Cliente = () => {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Espacio para input y botón */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-[#041D64] mb-2">
+                Cantidad
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Ingrese cantidad"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
+              />
+              <button
+                className="mt-4 w-full bg-[#041D64] text-white py-2 rounded-lg hover:bg-[#193F9E]"
+              >
+                Añadir al Carrito
+              </button>
             </div>
           </div>
         </div>

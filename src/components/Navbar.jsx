@@ -1,9 +1,11 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../utils/auth'
+import { useState } from 'react'
 
-const Navbar = () => {
+const Navbar = ({ onSearch }) => {
   const location = useLocation()
   const navigate = useNavigate()
+  const [searchText, setSearchText] = useState('')
 
   // Verificar si el usuario está en la sección de cliente
   const isClienteSection = location.pathname.startsWith('/cliente')
@@ -17,6 +19,12 @@ const Navbar = () => {
     } else if (isClienteSection) {
       navigate('/cliente')
     }
+  }
+
+  const handleInputChange = (e) => {
+    const value = e.target.value
+    setSearchText(value)
+    onSearch(value) // Comunica el valor al componente Cliente
   }
 
   return (
@@ -36,6 +44,8 @@ const Navbar = () => {
         <div className="flex-grow mx-4">
           <input
             type="text"
+            value={searchText}
+            onChange={handleInputChange}
             placeholder="Buscar comida, restaurantes, cafeterías..."
             className="w-full px-4 py-2 rounded-lg text-black bg-[#ECEDF1]"
           />

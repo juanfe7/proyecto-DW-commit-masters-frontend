@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import api from '../config/api'
 
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [productos, setProductos] = useState([])
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
 
+  // Estados de filtros
   const [filtroPrecio, setFiltroPrecio] = useState({
     menos10000: false,
     entre10000y20000: false,
@@ -34,11 +34,19 @@ const Cliente = () => {
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      const queryStrings = []
 
+      // Categoría: se permiten múltiples
       const categorias = []
       if (filtroCategoria.comida) categorias.push('comida')
       if (filtroCategoria.bebida) categorias.push('bebida')
 
+      // Ubicación
+      if (ubicacion.trim() !== '') {
+        queryStrings.push(`location=${encodeURIComponent(ubicacion)}`)
+      }
+
+      // Precios
       const priceRanges = []
       if (filtroPrecio.menos10000) priceRanges.push({ maxPrice: 9999 })
       if (filtroPrecio.entre10000y20000) priceRanges.push({ minPrice: 10000, maxPrice: 20000 })
@@ -46,6 +54,7 @@ const Cliente = () => {
 
       let responses = []
 
+      // Para cada combinación de categoría y rango de precio
       if (categorias.length > 0 && priceRanges.length > 0) {
         responses = await Promise.all(
           categorias.flatMap(cat =>
@@ -55,9 +64,9 @@ const Cliente = () => {
               if (rango.maxPrice) parts.push(`maxPrice=${rango.maxPrice}`)
               if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
               const query = parts.join('&')
-              return api.get(`/api/products?${query}`, {
+              return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
                 headers: { Authorization: `Bearer ${token}` },
-              }).then(res => res.data)
+              }).then(res => res.json())
             })
           )
         )
@@ -67,9 +76,9 @@ const Cliente = () => {
             const parts = [`category=${cat}`]
             if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
             const query = parts.join('&')
-            return api.get(`/api/products?${query}`, {
+            return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
               headers: { Authorization: `Bearer ${token}` },
-            }).then(res => res.data)
+            }).then(res => res.json())
           })
         )
       } else if (priceRanges.length > 0) {
@@ -80,19 +89,21 @@ const Cliente = () => {
             if (rango.maxPrice) parts.push(`maxPrice=${rango.maxPrice}`)
             if (ubicacion.trim() !== '') parts.push(`location=${encodeURIComponent(ubicacion)}`)
             const query = parts.join('&')
-            return api.get(`/api/products?${query}`, {
+            return fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
               headers: { Authorization: `Bearer ${token}` },
-            }).then(res => res.data)
+            }).then(res => res.json())
           })
         )
       } else {
+        // Sin filtros, solo ubicación si existe
         const query = ubicacion.trim() !== '' ? `location=${encodeURIComponent(ubicacion)}` : ''
-        const res = await api.get(`/api/products?${query}`, {
+        const res = await fetch(`https://proyecto-dw-commit-masters-backend.vercel.app/api/products?${query}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
-        responses = [res.data]
+        responses = [await res.json()]
       }
 
+      // Unir y eliminar duplicados
       const todos = responses.flat()
       const unicos = Array.from(new Map(todos.map(p => [p.id, p])).values())
       setProductos(unicos)
@@ -121,6 +132,7 @@ const Cliente = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
+      {/* Encabezado */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Productos Disponibles</h1>
         <button
@@ -131,6 +143,7 @@ const Cliente = () => {
         </button>
       </div>
 
+      {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
@@ -138,7 +151,7 @@ const Cliente = () => {
               className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
               onClick={() => abrirModalProducto(producto)}
             >
-              <img src={producto.imageUrl} alt={producto.name} className="w-full h-full object-cover" />
+              <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
@@ -156,6 +169,7 @@ const Cliente = () => {
         ))}
       </div>
 
+      {/* Modal de filtros */}
       {isModalOpen && (
         <div
           id="modal-background"
@@ -200,6 +214,7 @@ const Cliente = () => {
         </div>
       )}
 
+      {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"
@@ -222,7 +237,7 @@ const Cliente = () => {
             <div className="flex">
               <div className="w-1/2 pr-4">
                 <img
-                  src={productoSeleccionado.imageUrl}
+                  src={productoSeleccionado.image}
                   alt={productoSeleccionado.name}
                   className="w-full h-64 object-cover rounded-lg"
                 />

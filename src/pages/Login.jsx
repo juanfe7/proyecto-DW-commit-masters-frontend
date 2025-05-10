@@ -1,49 +1,65 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../config/api'
+import api from '../config/api' // ✅ AÑADIDO
 
 const Login = () => {
   const [usuario, setUsuario] = useState('')
   const [contraseña, setContraseña] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState('') // ✅ AÑADIDO
   const [rememberMe, setRememberMe] = useState(false)
   const navigate = useNavigate()
 
   const handleLogin = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!usuario || !contraseña) {
-      alert('Por favor, completa todos los campos.')
-      return
+      alert('Por favor, completa todos los campos.');
+      return;
     }
-
+  
     try {
-      const response = await api.post('/api/login', {
-        email: usuario,
-        password: contraseña
-      })
+      const response = await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: usuario,
+          password: contraseña
+        })
+      });
+  
+      const data = await response.json();
 
-      const data = response.data
-
-      if (rememberMe) {
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('rol', data.rol)
-      } else {
-        sessionStorage.setItem('token', data.token)
-        sessionStorage.setItem('rol', data.rol)
+      if (!response.ok) {
+        alert(data.error || 'Error al iniciar sesión');
+        return;
       }
 
+      if (response.ok) {
+        if (rememberMe) {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('rol', data.rol);
+        } else {
+          sessionStorage.setItem('token', data.token)
+          sessionStorage.setItem('rol', data.rol);
+        }
+      }
+
+  
+      // Redirigir según el rol
       if (data.rol === 'cliente') {
-        navigate('/cliente')
+        navigate('/cliente');
       } else if (data.rol === 'pos') {
-        navigate('/pos')
+        navigate('/pos');
       } else {
-        alert('Rol no reconocido.')
+        alert('Rol no reconocido.');
       }
     } catch (error) {
-      console.error('Error en el login:', error)
-      alert('Ocurrió un error al iniciar sesión.')
+      console.error('Error en el login:', error);
+      alert('Ocurrió un error al iniciar sesión.');
     }
-  }
+  };
+  
 
   const handleUsuarioChange = (e) => {
     const value = e.target.value
@@ -56,11 +72,19 @@ const Login = () => {
     <div className="flex items-center justify-center h-screen bg-[#041D64]">
       <form onSubmit={handleLogin} className="bg-[#041D64] p-6 w-80">
         <div className="flex justify-center mb-4">
-          <img src="/logo_login_sabana.png" alt="Logo Sabana" className="w-50 h-auto" />
+          <img
+            src="/logo_login_sabana.png" 
+            alt="Logo Sabana"
+            className="w-50 h-auto"
+          />
         </div>
-        <h2 className="text-2xl font-bold mb-4 text-center text-white">Iniciar Sesión</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center text-white">
+          Iniciar Sesión
+        </h2>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1 text-white">Usuario</label>
+          <label className="block text-sm font-medium mb-1 text-white">
+            Usuario
+          </label>
           <input
             type="text"
             value={usuario}
@@ -77,7 +101,9 @@ const Login = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-1 text-white">Contraseña</label>
+          <label className="block text-sm font-medium mb-1 text-white">
+            Contraseña
+          </label>
           <input
             type="password"
             value={contraseña}
@@ -95,9 +121,11 @@ const Login = () => {
             checked={rememberMe}
             onChange={() => setRememberMe(!rememberMe)}
           />
-          <label htmlFor="recordar-sesion" className="text-sm text-white">Recordar Sesión</label>
+          <label htmlFor="recordar-sesion" className="text-sm text-white">
+            Recordar Sesión
+          </label>
         </div>
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* ✅ MOSTRAR ERROR */}
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"

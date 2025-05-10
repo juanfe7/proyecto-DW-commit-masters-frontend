@@ -138,7 +138,7 @@ const Cliente = () => {
               className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
               onClick={() => abrirModalProducto(producto)}
             >
-              <img src={producto.imageUrl} alt={producto.name} className="w-full h-full object-cover" />
+              <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
@@ -222,7 +222,7 @@ const Cliente = () => {
             <div className="flex">
               <div className="w-1/2 pr-4">
                 <img
-                  src={productoSeleccionado.imageUrl}
+                  src={productoSeleccionado.image}
                   alt={productoSeleccionado.name}
                   className="w-full h-64 object-cover rounded-lg"
                 />

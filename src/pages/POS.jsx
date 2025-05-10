@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 const POS = () => {
   const navigate = useNavigate()
 
-  const handleNavigation = () => {
-    navigate('/pos/inventarioRestaurante')
+  const handleNavigation = (ubicacion) => {
+    navigate(`/pos/inventarioRestaurante/${encodeURIComponent(ubicacion)}`)
   }
 
   return (
@@ -29,7 +29,7 @@ const POS = () => {
             ].map((restaurante) => (
               <li
                 key={restaurante}
-                onClick={handleNavigation}
+                onClick={() => handleNavigation(restaurante)}
                 className="cursor-pointer text-blue-600 hover:underline"
               >
                 {restaurante}
@@ -53,7 +53,7 @@ const POS = () => {
             ].map((cafe) => (
               <li
                 key={cafe}
-                onClick={handleNavigation}
+                onClick={() => handleNavigation(cafe)}
                 className="cursor-pointer text-blue-600 hover:underline"
               >
                 {cafe}

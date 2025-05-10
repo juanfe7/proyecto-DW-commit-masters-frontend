@@ -32,9 +32,10 @@ const AppContent = () => {
 
             return <Route key={route.id} path={route.path} element={element} />
           })}
+          
           {/* Rutas adicionales */}
           <Route path="/pos" element={<POS />} />
-          <Route path="/pos/inventarioRestaurante" element={<InventarioRestaurante />} />
+          <Route path="/pos/inventarioRestaurante/:ubicacion" element={<InventarioRestaurante />} />
         </Routes>
       </main>
       <Footer />

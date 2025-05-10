@@ -12,6 +12,11 @@ const InventarioRestaurante = () => {
     navigate('/pos')
   }
 
+  const handleAgregarProducto = () => {
+    // Puedes cambiar la ruta por una específica si tienes un formulario
+    alert(`Agregar producto a ${ubicacion}`)
+  }
+
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -39,22 +44,27 @@ const InventarioRestaurante = () => {
   return (
     <div className="min-h-screen bg-white text-[#041D64] p-8">
       <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-4">
+          <button
+            onClick={handleAgregarProducto}
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+          >
+            Agregar Producto
+          </button>
+          <button
+            onClick={handleVolverAtras}
+            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+          >
+            Volver Atrás
+          </button>
+        </div>
         <h1 className="text-3xl font-bold">Inventario de {ubicacion}</h1>
-        <button
-          onClick={handleVolverAtras}
-          className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
-        >
-          Volver Atrás
-        </button>
       </div>
 
       <div className="grid grid-cols-3 gap-8">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
-            <div
-              className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => setProductoSeleccionado(producto)}
-            >
+            <div className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden">
               <img src={producto.imageUrl} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
@@ -62,6 +72,12 @@ const InventarioRestaurante = () => {
             <p className={`text-sm font-medium ${producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
               Stock: {producto.stock}
             </p>
+            <button
+              onClick={() => setProductoSeleccionado(producto)}
+              className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+            >
+              Ver
+            </button>
           </div>
         ))}
       </div>

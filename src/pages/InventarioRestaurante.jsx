@@ -36,6 +36,10 @@ const InventarioRestaurante = () => {
     }
   }
 
+  const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+  }
+
   useEffect(() => {
     fetchProductos()
   }, [ubicacion])

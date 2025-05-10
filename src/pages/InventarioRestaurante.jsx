@@ -45,7 +45,7 @@ const InventarioRestaurante = () => {
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
         {/* Título alineado a la izquierda */}
-        <h1 className="text-3xl font-bold">Inventario de: {ubicacion}</h1>
+        <h1 className="text-3xl font-bold">Inventario de {ubicacion}</h1>
 
         {/* Botones alineados a la derecha */}
         <div className="flex gap-4">
@@ -57,7 +57,7 @@ const InventarioRestaurante = () => {
           </button>
           <button
             onClick={handleVolverAtras}
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
           >
             Volver Atrás
           </button>

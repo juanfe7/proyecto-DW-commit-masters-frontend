@@ -15,12 +15,20 @@ const InventarioRestaurante = () => {
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      if (!token) {
+        console.warn('⚠️ No hay token disponible')
+        return
+      }
+
       const res = await api.get(`/api/products?location=${encodeURIComponent(ubicacion)}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       })
+
       setProductos(res.data)
     } catch (error) {
-      console.error('Error al cargar productos:', error)
+      console.error('❌ Error al cargar productos:', error)
     }
   }
 

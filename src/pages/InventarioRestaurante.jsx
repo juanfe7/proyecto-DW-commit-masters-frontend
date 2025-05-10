@@ -41,7 +41,7 @@ const InventarioRestaurante = () => {
   }, [ubicacion])
 
   return (
-    <div className="min-h-screen bg-white text-[#041D64] p-8">
+    <div className="min-h-screen bg-white text-[#041D64] p-8 border-b-4 border-[#E0EDFF]">
       {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
         {/* Título alineado a la izquierda */}

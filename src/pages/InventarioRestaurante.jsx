@@ -43,29 +43,24 @@ const InventarioRestaurante = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64] p-8">
-      {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
-        {/* Título alineado a la izquierda */}
-        <h1 className="text-3xl font-bold">Inventario de: {ubicacion}</h1>
-
-        {/* Botones alineados a la derecha */}
         <div className="flex gap-4">
           <button
             onClick={handleAgregarProducto}
-            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
           >
             Agregar Producto
           </button>
           <button
             onClick={handleVolverAtras}
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
           >
             Volver Atrás
           </button>
         </div>
+        <h1 className="text-3xl font-bold">Inventario de {ubicacion}</h1>
       </div>
 
-      {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
@@ -87,7 +82,6 @@ const InventarioRestaurante = () => {
         ))}
       </div>
 
-      {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"

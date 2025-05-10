@@ -13,7 +13,6 @@ const InventarioRestaurante = () => {
   }
 
   const handleAgregarProducto = () => {
-    // Puedes cambiar la ruta por una específica si tienes un formulario
     alert(`Agregar producto a ${ubicacion}`)
   }
 
@@ -43,28 +42,36 @@ const InventarioRestaurante = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64] p-8">
+      {/* Encabezado */}
       <div className="flex justify-between items-center mb-6">
+        {/* Título alineado a la izquierda */}
+        <h1 className="text-3xl font-bold">Inventario de: {ubicacion}</h1>
+
+        {/* Botones alineados a la derecha */}
         <div className="flex gap-4">
           <button
             onClick={handleAgregarProducto}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
+            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
           >
             Agregar Producto
           </button>
           <button
             onClick={handleVolverAtras}
-            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
           >
             Volver Atrás
           </button>
         </div>
-        <h1 className="text-3xl font-bold">Inventario de {ubicacion}</h1>
       </div>
 
+      {/* Grid de productos */}
       <div className="grid grid-cols-3 gap-8">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center">
-            <div className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden">
+            <div
+              className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+              onClick={() => setProductoSeleccionado(producto)} // Abrir modal al hacer clic en la imagen
+            >
               <img src={producto.imageUrl} alt={producto.name} className="w-full h-full object-cover" />
             </div>
             <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
@@ -82,6 +89,7 @@ const InventarioRestaurante = () => {
         ))}
       </div>
 
+      {/* Modal de información del producto */}
       {productoSeleccionado && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"

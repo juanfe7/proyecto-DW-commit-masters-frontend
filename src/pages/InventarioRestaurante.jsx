@@ -37,7 +37,7 @@ const InventarioRestaurante = () => {
   }
 
   const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
   }
 
   useEffect(() => {
@@ -103,6 +103,7 @@ const InventarioRestaurante = () => {
           }}
         >
           <div className="bg-white p-6 rounded-xl shadow-2xl max-w-3xl w-full flex flex-col">
+            {/* Encabezado del modal */}
             <div className="flex justify-between items-center border-b-2 border-[#E0EDFF] pb-4 mb-4">
               <h2 className="text-2xl font-bold text-[#041D64]">Información Producto</h2>
               <button
@@ -113,7 +114,9 @@ const InventarioRestaurante = () => {
               </button>
             </div>
 
+            {/* Contenido del modal */}
             <div className="flex">
+              {/* Imagen del producto */}
               <div className="w-1/2 pr-4">
                 <img
                   src={productoSeleccionado.image}
@@ -122,6 +125,7 @@ const InventarioRestaurante = () => {
                 />
               </div>
 
+              {/* Información del producto */}
               <div className="w-1/2 flex flex-col justify-between">
                 <div>
                   <p><span className="font-semibold">Nombre:</span> {productoSeleccionado.name}</p>
@@ -133,6 +137,22 @@ const InventarioRestaurante = () => {
                   </p>
                 </div>
               </div>
+            </div>
+
+            {/* Botones en la parte inferior */}
+            <div className="mt-6 flex justify-end gap-4">
+              <button
+                onClick={() => alert(`Editar producto: ${productoSeleccionado.name}`)}
+                className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+              >
+                Editar Producto
+              </button>
+              <button
+                onClick={() => alert(`Eliminar producto: ${productoSeleccionado.name}`)}
+                className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+              >
+                Eliminar Producto
+              </button>
             </div>
           </div>
         </div>

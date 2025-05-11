@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import api from '../config/api'
+import Swal from 'sweetalert2'
 
 const InventarioRestaurante = () => {
   const { ubicacion } = useParams()
@@ -144,19 +145,48 @@ const InventarioRestaurante = () => {
 
               <button
                 onClick={async () => {
-                  const confirmacion = window.confirm("¿Estás seguro de eliminar este producto?")
-                  if (!confirmacion) return
+                  const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                      confirmButton: "bg-green-600 text-white px-4 py-2 rounded-lg ml-2",
+                      cancelButton: "bg-red-600 text-white px-4 py-2 rounded-lg mr-2"
+                    },
+                    buttonsStyling: false
+                  })
 
-                  try {
-                    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-                    await api.delete(`/api/products/${productoSeleccionado.id}`, {
-                      headers: { Authorization: `Bearer ${token}` }
+                  const result = await swalWithBootstrapButtons.fire({
+                    title: "¿Estás seguro?",
+                    text: "¡No podrás revertir esto!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "No, cancelar",
+                    reverseButtons: true
+                  })
+
+                  if (result.isConfirmed) {
+                    try {
+                      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+                      await api.delete(`/api/products/${productoSeleccionado.id}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                      })
+                      setProductoSeleccionado(null)
+                      fetchProductos()
+
+                      swalWithBootstrapButtons.fire({
+                        title: "Eliminado",
+                        text: "El producto ha sido eliminado.",
+                        icon: "success"
+                      })
+                    } catch (error) {
+                      console.error('❌ Error al eliminar producto:', error)
+                      Swal.fire("Error", "No se pudo eliminar el producto.", "error")
+                    }
+                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    swalWithBootstrapButtons.fire({
+                      title: "Cancelado",
+                      text: "El producto está a salvo :)",
+                      icon: "error"
                     })
-                    setProductoSeleccionado(null)
-                    fetchProductos()
-                  } catch (error) {
-                    console.error('❌ Error al eliminar producto:', error)
-                    alert('Error al eliminar producto')
                   }
                 }}
                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"

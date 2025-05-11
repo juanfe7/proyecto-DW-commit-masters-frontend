@@ -141,6 +141,28 @@ const InventarioRestaurante = () => {
               >
                 Editar Producto
               </button>
+
+              <button
+                onClick={async () => {
+                  const confirmacion = window.confirm("¿Estás seguro de eliminar este producto?")
+                  if (!confirmacion) return
+
+                  try {
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+                    await api.delete(`/api/products/${productoSeleccionado.id}`, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    })
+                    setProductoSeleccionado(null)
+                    fetchProductos()
+                  } catch (error) {
+                    console.error('❌ Error al eliminar producto:', error)
+                    alert('Error al eliminar producto')
+                  }
+                }}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+              >
+                Eliminar Producto
+              </button>
             </div>
           </div>
         </div>

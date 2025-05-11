@@ -9,9 +9,17 @@ const InventarioRestaurante = () => {
   const [productoSeleccionado, setProductoSeleccionado] = useState(null)
   const [editando, setEditando] = useState(false)
   const [productoEditado, setProductoEditado] = useState({})
+  const [mostrandoModalAgregar, setMostrandoModalAgregar] = useState(false)
+  const [nuevoProducto, setNuevoProducto] = useState({
+    name: '',
+    price: '',
+    stock: '',
+    category: '',
+    imageUrl: ''
+  })
 
   const handleVolverAtras = () => navigate('/pos')
-  const handleAgregarProducto = () => alert(`Agregar producto a ${ubicacion}`)
+  const handleAgregarProducto = () => setMostrandoModalAgregar(true)
 
   const fetchProductos = async () => {
     try {
@@ -217,6 +225,88 @@ const InventarioRestaurante = () => {
                 }}
                 className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
               >
+                Confirmar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de agregar producto */}
+      {mostrandoModalAgregar && (
+        <div
+          className="fixed inset-0 flex items-center justify-center z-50"
+          id="modal-agregar-bg"
+          onClick={(e) => {
+            if (e.target.id === 'modal-agregar-bg') setMostrandoModalAgregar(false)
+          }}
+        >
+          <div className="bg-white p-6 rounded-xl shadow-2xl max-w-2xl w-full flex flex-col gap-4">
+            <h2 className="text-2xl font-bold text-[#041D64] mb-2">Añadir Producto</h2>
+
+            <label className="text-sm">Nombre:
+              <input type="text" value={nuevoProducto.name}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, name: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+            </label>
+
+            <label className="text-sm">Precio:
+              <input type="number" value={nuevoProducto.price}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, price: Number(e.target.value) })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+            </label>
+
+            <label className="text-sm">Stock:
+              <input type="number" value={nuevoProducto.stock}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, stock: Number(e.target.value) })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+            </label>
+
+            <label className="text-sm">Categoría:
+              <select value={nuevoProducto.category}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, category: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                <option value="">Selecciona una</option>
+                <option value="comida">Comida</option>
+                <option value="bebida">Bebida</option>
+              </select>
+            </label>
+
+            <label className="text-sm">Imagen (URL):
+              <input type="text" value={nuevoProducto.imageUrl}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, imageUrl: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+            </label>
+
+            <div className="flex justify-end gap-4 mt-4">
+              <button
+                onClick={() => setMostrandoModalAgregar(false)}
+                className="px-4 py-2 bg-gray-400 text-white rounded-lg">
+                Cancelar
+              </button>
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+                    const productoConUbicacion = { ...nuevoProducto, location: ubicacion }
+                    await api.post('/api/products', productoConUbicacion, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    })
+                    setMostrandoModalAgregar(false)
+                    setNuevoProducto({
+                      name: '',
+                      price: '',
+                      stock: '',
+                      category: '',
+                      imageUrl: ''
+                    })
+                    fetchProductos()
+                  } catch (err) {
+                    console.error('❌ Error al crear producto:', err)
+                    alert('Error al crear el producto')
+                  }
+                }}
+                className="px-4 py-2 bg-[#041D64] text-white rounded-lg hover:bg-[#193F9E]">
                 Confirmar
               </button>
             </div>

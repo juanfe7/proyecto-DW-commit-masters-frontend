@@ -16,7 +16,7 @@ const InventarioRestaurante = () => {
     price: '',
     stock: '',
     category: '',
-    imageUrl: ''
+    image: ''
   })
 
   const handleVolverAtras = () => navigate('/pos')
@@ -325,8 +325,8 @@ const InventarioRestaurante = () => {
             </label>
 
             <label className="text-sm">Imagen (URL):
-              <input type="text" value={nuevoProducto.imageUrl}
-                onChange={(e) => setNuevoProducto({ ...nuevoProducto, imageUrl: e.target.value })}
+              <input type="text" value={nuevoProducto.image}
+                onChange={(e) => setNuevoProducto({ ...nuevoProducto, image: e.target.value })}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
             </label>
 

@@ -18,6 +18,7 @@ const Cliente = () => {
   })
 
   const [ubicacion, setUbicacion] = useState('')
+  const nombre = localStorage.getItem('name') || sessionStorage.getItem('name')
 
   const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {
@@ -34,7 +35,6 @@ const Cliente = () => {
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
       const categorias = []
       if (filtroCategoria.comida) categorias.push('comida')
       if (filtroCategoria.bebida) categorias.push('bebida')
@@ -122,7 +122,7 @@ const Cliente = () => {
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
-        <h1 className="text-2xl font-bold">Productos Disponibles</h1>
+        <h1 className="text-2xl font-bold">Bienvenido, {nombre}</h1>
         <button
           onClick={toggleModalFiltro}
           className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"

@@ -17,7 +17,7 @@ const Login = () => {
     }
   
     try {
-      const response = await fetch('https://proyecto-dw-commit-masters-backend.vercel.app/api/login', {
+      const response = await fetch('https://proyecto-dw-commit-masters-backend-v2.vercel.app/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -29,6 +29,7 @@ const Login = () => {
       });
   
       const data = await response.json();
+      console.log('Respuesta del servidor:', data); // ✅ AÑADIDO
 
       if (!response.ok) {
         alert(data.error || 'Error al iniciar sesión');

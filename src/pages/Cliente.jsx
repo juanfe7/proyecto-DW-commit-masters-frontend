@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import api from '../config/api'
+import { getUserFromToken } from '../utils/auth';
 
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -18,15 +19,19 @@ const Cliente = () => {
   })
 
   const [ubicacion, setUbicacion] = useState('')
-  
+
   const [nombre, setNombre] = useState('')
 
   useEffect(() => {
-    const nameFromStorage = localStorage.getItem('name') || sessionStorage.getItem('name')
-    if (nameFromStorage) {
-      setNombre(nameFromStorage)
+    const user = getUserFromToken();
+    console.log('User desde token:', user); // aquí deberías ver el nombre correctamente
+    if (user?.name) {
+      setNombre(user.name);
     }
-  }, [])
+  }, []);
+
+
+
 
   const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {

@@ -18,7 +18,15 @@ const Cliente = () => {
   })
 
   const [ubicacion, setUbicacion] = useState('')
-  const nombre = localStorage.getItem('name') || sessionStorage.getItem('name')
+  
+  const [nombre, setNombre] = useState('')
+
+  useEffect(() => {
+    const nameFromStorage = localStorage.getItem('name') || sessionStorage.getItem('name')
+    if (nameFromStorage) {
+      setNombre(nameFromStorage)
+    }
+  }, [])
 
   const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {

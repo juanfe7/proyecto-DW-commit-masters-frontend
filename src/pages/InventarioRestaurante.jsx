@@ -350,7 +350,7 @@ const InventarioRestaurante = () => {
                       price: '',
                       stock: '',
                       category: '',
-                      imageUrl: ''
+                      image: ''
                     })
                     fetchProductos()
                   } catch (err) {

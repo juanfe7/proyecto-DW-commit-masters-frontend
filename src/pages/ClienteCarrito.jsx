@@ -29,6 +29,11 @@ const ClienteCarrito = () => {
     setCartItems([])
   }
 
+  const handleHacerPedido = () => {
+    // Aquí puedes agregar la lógica real para hacer el pedido
+    alert('Funcionalidad de hacer pedido')
+  }
+
   const calcularTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
   }
@@ -78,17 +83,25 @@ const ClienteCarrito = () => {
               ))}
             </ul>
 
-            {/* Total y botón de vaciar */}
+            {/* Total y botones de vaciar y hacer pedido */}
             <div className="mt-6 flex justify-between items-center">
               <div className="text-xl font-bold text-[#041D64]">
                 Total: ${calcularTotal()}
               </div>
-              <button
-                onClick={handleVaciarCarrito}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
-              >
-                Vaciar Carrito
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={handleVaciarCarrito}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+                >
+                  Vaciar Carrito
+                </button>
+                <button
+                  onClick={handleHacerPedido}
+                  className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+                >
+                  Hacer Pedido
+                </button>
+              </div>
             </div>
           </>
         )}

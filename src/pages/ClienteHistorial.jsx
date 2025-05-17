@@ -78,9 +78,9 @@ const ClienteHistorial = () => {
                   <h2 className="text-lg font-semibold">Pedido #{order.id}</h2>
                   <span
                     className={`px-3 py-1 text-sm rounded-full ${
-                      order.status === 'En confirmacion'
+                      order.status === 'en confirmacion'
                         ? 'bg-yellow-200 text-yellow-800'
-                        : order.status === 'En proceso'
+                        : order.status === 'en proceso'
                         ? 'bg-blue-200 text-blue-800'
                         : 'bg-green-200 text-green-800'
                     }`}

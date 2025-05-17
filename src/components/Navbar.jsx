@@ -31,7 +31,7 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Input de búsqueda en el centro */}
+      {/* Input de búsqueda solo para cliente */}
       {isClienteSection && (
         <div className="flex-grow mx-4">
           <input
@@ -42,38 +42,77 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Botones en el lado derecho */}
+      {/* Botones lado derecho */}
       <div className="flex items-center space-x-4">
+        {/* Cliente: historial y carrito */}
         {isClienteSection && (
           <>
             <Link
               to="/cliente/historial"
-              className="bg-[#E0EDFF] px-2 py-2"
+              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
             >
               <img
                 src="/receipt-svgrepo-com.svg"
                 alt="Historial de Pedidos"
                 className="w-6 h-6"
                 style={{
-                  filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
+                  filter:
+                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
                 }}
               />
             </Link>
             <Link
               to="/cliente/carrito"
-              className="bg-[#E0EDFF] px-2 py-2"
+              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
             >
               <img
                 src="/icon-add-to-cart.svg"
                 alt="Carrito de Compras"
                 className="w-6 h-6"
                 style={{
-                  filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
+                  filter:
+                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
                 }}
               />
             </Link>
           </>
         )}
+
+        {/* POS: dashboard y perfil */}
+        {isPOSSection && (
+          <>
+            <Link
+              to="/pos/dashboard"
+              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
+            >
+              <img
+                src="/dashboard-svgrepo-com.svg"
+                alt="Dashboard"
+                className="w-6 h-6"
+                style={{
+                  filter:
+                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
+                }}
+              />
+            </Link>
+            <Link
+              to="/pos/profile"
+              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
+            >
+              <img
+                src="/user-circle-svgrepo-com.svg"
+                alt="Perfil POS"
+                className="w-6 h-6"
+                style={{
+                  filter:
+                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
+                }}
+              />
+            </Link>
+          </>
+        )}
+
+        {/* Botón cerrar sesión (para todos) */}
         <button
           onClick={logout}
           className="bg-white px-3 py-2 rounded-lg hover:bg-[#E0EDFF] text-[#041D64] border border-[#041D64]"

@@ -11,7 +11,7 @@ const POSDashboard = () => {
     try {
       const estados = ['en confirmacion', 'en proceso']
       const responses = await Promise.all(estados.map(status =>
-        api.get(`/api/orders?status=${encodeURIComponent(status)}`, {
+        api.get(`/api/orders/all?status=${encodeURIComponent(status)}`, {
           headers: { Authorization: `Bearer ${token}` }
         }).then(res => res.data)
       ))

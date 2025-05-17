@@ -12,6 +12,13 @@ const ClienteHistorial = () => {
     navigate('/cliente')
   }
 
+  const handleLimpiarHistorial = () => {
+    const confirmacion = window.confirm('¿Estás seguro de que quieres borrar tu historial visualmente?')
+    if (confirmacion) {
+      setOrders([]) // Solo borra del estado
+    }
+  }
+
   useEffect(() => {
     const fetchHistorial = async () => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -36,12 +43,20 @@ const ClienteHistorial = () => {
       {/* Encabezado */}
       <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
         <h1 className="text-2xl font-bold">Historial de Pedidos</h1>
-        <button
-          onClick={handleVolverAtras}
-          className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
-        >
-          Volver Atrás
-        </button>
+        <div className="flex gap-4">
+          <button
+            onClick={handleVolverAtras}
+            className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+          >
+            Volver Atrás
+          </button>
+          <button
+            onClick={handleLimpiarHistorial}
+            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
+          >
+            Limpiar Historial
+          </button>
+        </div>
       </div>
 
       {/* Contenido principal */}
@@ -63,9 +78,9 @@ const ClienteHistorial = () => {
                   <h2 className="text-lg font-semibold">Pedido #{order.id}</h2>
                   <span
                     className={`px-3 py-1 text-sm rounded-full ${
-                      order.status === 'en confirmacion'
+                      order.status === 'En confirmacion'
                         ? 'bg-yellow-200 text-yellow-800'
-                        : order.status === 'en proceso'
+                        : order.status === 'En proceso'
                         ? 'bg-blue-200 text-blue-800'
                         : 'bg-green-200 text-green-800'
                     }`}

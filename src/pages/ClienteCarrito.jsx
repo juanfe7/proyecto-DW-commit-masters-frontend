@@ -1,6 +1,8 @@
+import api from '../config/api'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getCart, removeFromCart, clearCart } from '../utils/cart'
+import { getUserFromToken } from '../utils/auth'
 
 const ClienteCarrito = () => {
   const navigate = useNavigate()
@@ -29,10 +31,36 @@ const ClienteCarrito = () => {
     setCartItems([])
   }
 
-  const handleHacerPedido = () => {
-    // Aquí puedes agregar la lógica real para hacer el pedido
-    alert('Funcionalidad de hacer pedido')
+  const handleHacerPedido = async () => {
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+  const products = getCart().map(({ id, quantity }) => ({ id, quantity }));
+
+  if (!products.length) {
+    alert('Tu carrito está vacío.');
+    return;
   }
+
+  try {
+    const response = await api.post(
+      '/api/orders',
+      { products },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    alert('✅ Pedido realizado con éxito');
+    clearCart();
+    setCartItems([]);
+    navigate('/cliente/historial');
+  } catch (error) {
+    console.error('Error al hacer pedido:', error);
+    const mensaje = error?.response?.data?.message || 'Hubo un error al realizar el pedido.';
+    alert(`❌ ${mensaje}`);
+  }
+  };
 
   const calcularTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)

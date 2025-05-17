@@ -38,10 +38,12 @@ const Login = () => {
 
       if (response.ok) {
         if (rememberMe) {
+          localStorage.setItem('remember', true)
           localStorage.setItem('token', data.token)
           localStorage.setItem('rol', data.rol);
           localStorage.setItem('name', data.name)
         } else {
+          sessionStorage.setItem('remember', false)
           sessionStorage.setItem('token', data.token)
           sessionStorage.setItem('rol', data.rol);
           sessionStorage.setItem('name', data.name)

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import api from '../config/api'
 import { getUserFromToken } from '../utils/auth';
+import { addToCart } from '../utils/cart'
+
+
 
 const Cliente = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -18,6 +21,8 @@ const Cliente = () => {
     bebida: false,
   })
 
+  const [cantidadSeleccionada, setCantidadSeleccionada] = useState(1);
+
   const [ubicacion, setUbicacion] = useState('')
 
   const [nombre, setNombre] = useState('')
@@ -31,15 +36,17 @@ const Cliente = () => {
   }, []);
 
 
-
-
   const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {
     if (e.target.id === 'modal-background') setIsModalOpen(false)
   }
 
   const abrirModalProducto = (producto) => setProductoSeleccionado(producto)
-  const cerrarModalProducto = () => setProductoSeleccionado(null)
+  const cerrarModalProducto = () => {
+    setProductoSeleccionado(null);
+    setCantidadSeleccionada(1); // Reinicia a 1
+  };
+
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1)
@@ -259,10 +266,16 @@ const Cliente = () => {
               <input
                 type="number"
                 min="1"
+                value={cantidadSeleccionada}
+                onChange={(e) => setCantidadSeleccionada(Number(e.target.value))}
                 placeholder="Ingrese cantidad"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
               />
               <button
+                onClick={() => {
+                  addToCart({ ...productoSeleccionado, quantity: cantidadSeleccionada });
+                  cerrarModalProducto(); // Cierra el modal
+                }}
                 className="mt-4 w-full bg-[#041D64] text-white py-2 rounded-lg hover:bg-[#193F9E]"
               >
                 Añadir al Carrito

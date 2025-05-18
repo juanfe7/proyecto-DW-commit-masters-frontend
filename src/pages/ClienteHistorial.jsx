@@ -40,10 +40,10 @@ const ClienteHistorial = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
-      {/* Encabezado */}
-      <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
+      {/* Encabezado responsive */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-8 py-6 border-b-4 border-[#E0EDFF] max-w-7xl mx-auto gap-4">
         <h1 className="text-2xl font-bold">Historial de Pedidos</h1>
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <button
             onClick={handleVolverAtras}
             className="bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
@@ -60,7 +60,7 @@ const ClienteHistorial = () => {
       </div>
 
       {/* Contenido principal */}
-      <div className="px-8 py-6 max-w-[80%] mx-auto">
+      <div className="px-4 sm:px-8 py-6 max-w-7xl mx-auto">
         {loading ? (
           <p className="text-gray-500">Cargando pedidos...</p>
         ) : error ? (
@@ -72,12 +72,12 @@ const ClienteHistorial = () => {
             {orders.map((order) => (
               <div
                 key={order.id}
-                className="border border-gray-300 rounded-lg shadow-md p-4"
+                className="border border-gray-300 rounded-xl shadow-sm p-4 bg-white"
               >
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
                   <h2 className="text-lg font-semibold">Pedido #{order.id}</h2>
                   <span
-                    className={`px-3 py-1 text-sm rounded-full ${
+                    className={`px-3 py-1 text-sm rounded-full whitespace-nowrap ${
                       order.status === 'en confirmacion'
                         ? 'bg-yellow-200 text-yellow-800'
                         : order.status === 'en proceso'
@@ -89,9 +89,12 @@ const ClienteHistorial = () => {
                   </span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Fecha: {new Date(order.createdAt._seconds * 1000).toLocaleString()}
+                  Fecha:{' '}
+                  {new Date(order.createdAt._seconds * 1000).toLocaleString()}
                 </p>
-                <p className="text-sm text-gray-700 font-medium mt-2">Total: ${order.total}</p>
+                <p className="text-sm text-gray-700 font-medium mt-2">
+                  Total: ${order.total}
+                </p>
                 <ul className="mt-3 space-y-1">
                   {order.products.map((prod, idx) => (
                     <li key={idx} className="text-sm text-gray-700">

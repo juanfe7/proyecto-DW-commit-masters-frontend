@@ -272,7 +272,8 @@ const Cliente = () => {
                   if (val === '') {
                     setCantidadSeleccionada('');
                   } else if (/^\d+$/.test(val) && Number(val) > 0) {
-                    setCantidadSeleccionada(Number(val));
+                    const cantidad = Math.min(Number(val), productoSeleccionado.stock);
+                    setCantidadSeleccionada(cantidad);
                   }
                 }}
                 placeholder="Ingrese cantidad"

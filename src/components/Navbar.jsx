@@ -95,6 +95,20 @@ const Navbar = () => {
                 }}
               />
             </Link>
+            <Link
+              to="/pos/profile"
+              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
+            >
+              <img
+                src="/review-file-svgrepo-com.svg"
+                alt="Perfil POS"
+                className="w-6 h-6"
+                style={{
+                  filter:
+                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
+                }}
+              />
+            </Link>
           </>
         )}
 

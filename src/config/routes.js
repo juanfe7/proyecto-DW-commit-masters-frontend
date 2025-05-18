@@ -8,6 +8,7 @@ import POS from '../pages/POS'
 import Error403 from '../pages/Error403'
 import InventarioRestaurante from '../pages/InventarioRestaurante'
 import PrivateRoute from '../components/PrivateRoute'
+import ClienteReseñas from '../pages/ClienteReseñas'
 
 
 export const routes = [
@@ -73,5 +74,12 @@ export const routes = [
     name: 'Inventario Restaurante',
     component: InventarioRestaurante,
     roles: ['pos']
+  },
+  {
+  id: 'cliente-reseñas',
+  path: '/cliente/reseñas',
+  name: 'Cliente Reseñas',
+  component: ClienteReseñas,
+  roles: ['cliente']
   }
 ]

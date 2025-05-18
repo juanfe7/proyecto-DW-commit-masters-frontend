@@ -50,8 +50,8 @@ const POSDashboard = () => {
   const ordenesActivas = ordenes.filter(orden => orden.status !== 'entregado')
 
   return (
-    <div className="min-h-screen bg-white text-[#041D64] px-8 py-6 max-w-[80%] mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Gestión de Pedidos</h1>
+    <div className="min-h-screen bg-white text-[#041D64] px-4 sm:px-8 py-6 max-w-7xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">Gestión de Pedidos</h1>
 
       {loading ? (
         <p className="text-gray-500">Cargando órdenes...</p>
@@ -64,12 +64,12 @@ const POSDashboard = () => {
           {ordenesActivas.map((orden) => (
             <div
               key={orden.id}
-              className="border border-gray-300 rounded-lg shadow-md p-4 bg-gray-50"
+              className="border border-gray-300 rounded-xl shadow-sm p-4 bg-gray-50"
             >
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-2 gap-2">
                 <h2 className="text-lg font-semibold">Orden #{orden.id}</h2>
                 <span
-                  className={`px-3 py-1 text-sm rounded-full ${
+                  className={`px-3 py-1 text-sm rounded-full whitespace-nowrap ${
                     orden.status === 'en confirmacion'
                       ? 'bg-yellow-200 text-yellow-800'
                       : 'bg-blue-200 text-blue-800'
@@ -78,9 +78,10 @@ const POSDashboard = () => {
                   {orden.status}
                 </span>
               </div>
+
               <p className="text-sm text-gray-700">Cliente: {orden.name}</p>
               <p className="text-sm text-gray-700 mb-2">Total: ${orden.total}</p>
-              <ul className="text-sm text-gray-600 mb-3">
+              <ul className="text-sm text-gray-600 mb-3 space-y-1">
                 {orden.products.map((prod, i) => (
                   <li key={i}>• {prod.name} (x{prod.quantity}) – {prod.location}</li>
                 ))}
@@ -99,7 +100,6 @@ const POSDashboard = () => {
                 <button
                   onClick={async () => {
                     await actualizarEstado(orden.id, 'entregado');
-
                     Swal.fire({
                       title: "Pedido entregado",
                       text: "El pedido fue marcado como entregado exitosamente.",

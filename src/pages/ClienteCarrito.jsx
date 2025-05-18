@@ -68,8 +68,8 @@ const ClienteCarrito = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
-      {/* Encabezado */}
-      <div className="flex justify-between items-center px-8 py-6 border-b-4 border-[#E0EDFF] max-w-[80%] mx-auto">
+      {/* Encabezado responsive */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-8 py-6 border-b-4 border-[#E0EDFF] max-w-7xl mx-auto gap-4">
         <h1 className="text-2xl font-bold">Carrito de Compras</h1>
         <button
           onClick={handleVolverAtras}
@@ -80,7 +80,7 @@ const ClienteCarrito = () => {
       </div>
 
       {/* Contenido principal */}
-      <div className="px-8 py-6 max-w-[80%] mx-auto">
+      <div className="px-4 sm:px-8 py-6 max-w-7xl mx-auto">
         {cartItems.length === 0 ? (
           <p className="text-gray-500">Tu carrito está vacío.</p>
         ) : (
@@ -89,14 +89,14 @@ const ClienteCarrito = () => {
               {cartItems.map((item) => (
                 <li
                   key={item.id}
-                  className="border p-4 rounded-lg shadow flex justify-between items-center"
+                  className="border p-4 rounded-lg shadow flex flex-col sm:flex-row justify-between gap-4"
                 >
-                  <div>
-                    <p className="font-semibold">{item.name}</p>
-                    <p>Cantidad: {item.quantity}</p>
-                    <p>Precio unitario: ${item.price}</p>
+                  <div className="flex-1">
+                    <p className="font-semibold text-lg">{item.name}</p>
+                    <p className="text-sm">Cantidad: {item.quantity}</p>
+                    <p className="text-sm">Precio unitario: ${item.price}</p>
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     <p className="font-bold text-[#041D64]">
                       Subtotal: ${item.price * item.quantity}
                     </p>
@@ -111,12 +111,12 @@ const ClienteCarrito = () => {
               ))}
             </ul>
 
-            {/* Total y botones de vaciar y hacer pedido */}
-            <div className="mt-6 flex justify-between items-center">
+            {/* Total y acciones */}
+            <div className="mt-6 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
               <div className="text-xl font-bold text-[#041D64]">
                 Total: ${calcularTotal()}
               </div>
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={handleVaciarCarrito}
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700"
@@ -136,6 +136,7 @@ const ClienteCarrito = () => {
       </div>
     </div>
   )
+
 }
 
 export default ClienteCarrito

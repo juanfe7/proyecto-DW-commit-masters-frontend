@@ -8,12 +8,12 @@ const POS = () => {
   }
 
   return (
-    <div className="h-screen bg-white text-[#041D64] flex flex-col items-center justify-center">
-      <div className="flex justify-center gap-16 -mt-16">
-        {/* Lista de Restaurantes */}
-        <div>
+    <div className="min-h-screen bg-white text-[#041D64] flex items-center justify-center px-4 py-10">
+      <div className="flex flex-col lg:flex-row gap-10 w-full max-w-5xl">
+        {/* Restaurantes */}
+        <div className="flex-1">
           <h2 className="text-2xl font-semibold mb-4 text-center">Lista de Restaurantes</h2>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {[
               'Embarcadero',
               'Mesón',
@@ -30,7 +30,7 @@ const POS = () => {
               <li
                 key={restaurante}
                 onClick={() => handleNavigation(restaurante)}
-                className="cursor-pointer text-blue-600 hover:underline"
+                className="cursor-pointer px-4 py-3 rounded-lg border border-gray-200 hover:bg-blue-50 transition text-center shadow-sm"
               >
                 {restaurante}
               </li>
@@ -38,10 +38,10 @@ const POS = () => {
           </ul>
         </div>
 
-        {/* Lista de Cafés */}
-        <div>
+        {/* Cafés */}
+        <div className="flex-1">
           <h2 className="text-2xl font-semibold mb-4 text-center">Lista de Cafés</h2>
-          <ul className="space-y-2">
+          <ul className="space-y-3">
             {[
               'Punto Café',
               'Café Embarcadero',
@@ -54,7 +54,7 @@ const POS = () => {
               <li
                 key={cafe}
                 onClick={() => handleNavigation(cafe)}
-                className="cursor-pointer text-blue-600 hover:underline"
+                className="cursor-pointer px-4 py-3 rounded-lg border border-gray-200 hover:bg-blue-50 transition text-center shadow-sm"
               >
                 {cafe}
               </li>

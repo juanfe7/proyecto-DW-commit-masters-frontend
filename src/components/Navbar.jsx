@@ -78,7 +78,7 @@ const Navbar = () => {
           </>
         )}
 
-        {/* POS: dashboard y perfil */}
+        {/* POS: solo dashboard */}
         {isPOSSection && (
           <>
             <Link
@@ -86,22 +86,8 @@ const Navbar = () => {
               className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
             >
               <img
-                src="/dashboard-svgrepo-com.svg"
+                src="/receipt-svgrepo-com.svg"
                 alt="Dashboard"
-                className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
-              />
-            </Link>
-            <Link
-              to="/pos/profile"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
-              <img
-                src="/user-circle-svgrepo-com.svg"
-                alt="Perfil POS"
                 className="w-6 h-6"
                 style={{
                   filter:

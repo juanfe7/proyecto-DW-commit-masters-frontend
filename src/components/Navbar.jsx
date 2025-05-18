@@ -146,10 +146,10 @@ const Navbar = () => {
         <div className="md:hidden px-4 pb-4 space-y-3 text-center">
           {isClienteSection && (
             <>
-              <Link to="/cliente/historial" className="block bg-[#E0EDFF] py-2 rounded-lg">Historial</Link>
-              <Link to="/cliente/carrito" className="block bg-[#E0EDFF] py-2 rounded-lg">Carrito</Link>
-              <Link to="/cliente/reseñas" className="block bg-[#E0EDFF] py-2 rounded-lg">Reseñas</Link>
-              <Link to="/cliente/notificaciones" className="block bg-[#E0EDFF] py-2 rounded-lg">
+              <Link to="/cliente/historial" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">Historial</Link>
+              <Link to="/cliente/carrito" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">Carrito</Link>
+              <Link to="/cliente/reseñas" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">Reseñas</Link>
+              <Link to="/cliente/notificaciones" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">
                 Notificaciones
                 {notificacionesNuevas > 0 && (
                   <span className="ml-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full">
@@ -161,12 +161,15 @@ const Navbar = () => {
           )}
           {isPOSSection && (
             <>
-              <Link to="/pos/dashboard" className="block bg-[#E0EDFF] py-2 rounded-lg">Dashboard</Link>
-              <Link to="/pos/profile" className="block bg-[#E0EDFF] py-2 rounded-lg">Perfil POS</Link>
+              <Link to="/pos/dashboard" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">Dashboard</Link>
+              <Link to="/pos/profile" onClick={() => setMenuAbierto(false)} className="block bg-[#E0EDFF] py-2 rounded-lg">Perfil POS</Link>
             </>
           )}
           <button
-            onClick={logout}
+            onClick={() => {
+              setMenuAbierto(false)
+              logout()
+            }}
             className="w-full bg-white py-2 rounded-lg hover:bg-[#E0EDFF] text-[#041D64] border border-[#041D64]"
           >
             Cerrar Sesión

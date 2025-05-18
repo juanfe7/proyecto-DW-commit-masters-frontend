@@ -2,52 +2,45 @@ import { useEffect, useState } from 'react'
 import api from '../config/api'
 import Swal from 'sweetalert2'
 
-
 const POSDashboard = () => {
   const [ordenes, setOrdenes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const fetchOrdenes = async () => {
+  const obtenerOrdenes = async () => {
     try {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      if (!token) return;
-
-      const res = await api.get('/api/orders/all', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      console.log('✅ Órdenes obtenidas:', res.data)
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+      const res = await api.get('/api/orders', {
+        headers: { Authorization: `Bearer ${token}` }
+      })
       setOrdenes(res.data)
-    } catch (error) {
-      console.error('❌ Error al cargar órdenes:', error.response || error.message || error)
-      setError('Error al cargar órdenes')
+    } catch (err) {
+      setError('Error al cargar las órdenes')
+      console.error(err)
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => {
-    fetchOrdenes()
-  }, [])
-
   const actualizarEstado = async (id, nuevoEstado) => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     try {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
       await api.patch(`/api/orders/${id}/status`, { status: nuevoEstado }, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      
-      fetchOrdenes()
+      obtenerOrdenes()
     } catch (err) {
-      console.error(err)
-      alert('Error al actualizar el estado')
+      console.error('Error al actualizar estado:', err)
     }
   }
 
-  const ordenesActivas = ordenes.filter(orden => orden.status !== 'entregado')
+  useEffect(() => {
+    obtenerOrdenes()
+  }, [])
+
+  const ordenesActivas = ordenes.filter(
+    (orden) => orden.status === 'en confirmacion' || orden.status === 'en proceso' || orden.status === 'listo'
+  )
 
   return (
     <div className="min-h-screen bg-white text-[#041D64] px-4 sm:px-8 py-6 max-w-7xl mx-auto">
@@ -58,7 +51,7 @@ const POSDashboard = () => {
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : ordenesActivas.length === 0 ? (
-        <p className="text-gray-500">No hay órdenes en confirmación o proceso.</p>
+        <p className="text-gray-500">No hay órdenes en confirmación, proceso o listas.</p>
       ) : (
         <div className="space-y-6">
           {ordenesActivas.map((orden) => (
@@ -72,7 +65,11 @@ const POSDashboard = () => {
                   className={`px-3 py-1 text-sm rounded-full whitespace-nowrap ${
                     orden.status === 'en confirmacion'
                       ? 'bg-yellow-200 text-yellow-800'
-                      : 'bg-blue-200 text-blue-800'
+                      : orden.status === 'en proceso'
+                      ? 'bg-blue-200 text-blue-800'
+                      : orden.status === 'listo'
+                      ? 'bg-indigo-200 text-indigo-800'
+                      : 'bg-green-200 text-green-800'
                   }`}
                 >
                   {orden.status}
@@ -97,6 +94,15 @@ const POSDashboard = () => {
               )}
 
               {orden.status === 'en proceso' && (
+                <button
+                  onClick={() => actualizarEstado(orden.id, 'listo')}
+                  className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
+                >
+                  Marcar como Listo
+                </button>
+              )}
+
+              {orden.status === 'listo' && (
                 <button
                   onClick={async () => {
                     await actualizarEstado(orden.id, 'entregado');

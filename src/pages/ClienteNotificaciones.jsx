@@ -40,7 +40,16 @@ const ClienteNotificaciones = () => {
         <p className="text-gray-500">No tienes notificaciones nuevas.</p>
       ) : (
         notificaciones.map(n => (
-          <div key={n.id} className={`mb-4 p-4 rounded shadow ${n.read ? 'bg-gray-100' : 'bg-blue-100'}`}>
+            <div
+              key={n.id}
+              className={`mb-4 p-4 rounded shadow ${
+                n.read
+                  ? 'bg-gray-100'
+                  : n.message.includes('listo')
+                  ? 'bg-indigo-100'
+                  : 'bg-blue-100'
+              }`}
+            >
             <p className="text-sm">{n.message}</p>
             <p className="text-xs text-gray-500 mt-1">{new Date(n.createdAt).toLocaleString()}</p>
             {!n.read && (

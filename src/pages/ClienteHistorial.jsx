@@ -82,6 +82,8 @@ const ClienteHistorial = () => {
                         ? 'bg-yellow-200 text-yellow-800'
                         : order.status === 'en proceso'
                         ? 'bg-blue-200 text-blue-800'
+                        : order.status === 'listo'
+                        ? 'bg-indigo-200 text-indigo-800'
                         : 'bg-green-200 text-green-800'
                     }`}
                   >

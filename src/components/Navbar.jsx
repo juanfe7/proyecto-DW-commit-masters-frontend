@@ -43,13 +43,13 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white border-b border-gray-200 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div className="px-4 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
           <img
             src="/logo_sabana_navbar.png"
             alt="Logo"
-            className="h-10 w-auto cursor-pointer"
+            className="w-42 h-auto mr-4 cursor-pointer"
             onClick={handleLogoClick}
           />
         </div>
@@ -71,7 +71,7 @@ const Navbar = () => {
         <div className="hidden md:flex items-center space-x-4">
           {isClienteSection && (
             <>
-              <Link to="/cliente/historial" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
+              <Link to="/cliente/historial" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
                 <img
                   src="/receipt-svgrepo-com.svg"
                   alt="Historial"
@@ -79,7 +79,7 @@ const Navbar = () => {
                   style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
                 />
               </Link>
-              <Link to="/cliente/carrito" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
+              <Link to="/cliente/carrito" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
                 <img
                   src="/icon-add-to-cart.svg"
                   alt="Carrito"
@@ -87,7 +87,7 @@ const Navbar = () => {
                   style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
                 />
               </Link>
-              <Link to="/cliente/reseñas" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
+              <Link to="/cliente/reseñas" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
                 <img
                   src="/review-file-svgrepo-com.svg"
                   alt="Reseñas"
@@ -95,7 +95,7 @@ const Navbar = () => {
                   style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
                 />
               </Link>
-              <Link to="/cliente/notificaciones" className="relative bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
+              <Link to="/cliente/notificaciones" className="relative bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
                 <img
                   src="/bell-svgrepo-com.svg"
                   alt="Notificaciones"

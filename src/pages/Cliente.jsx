@@ -168,7 +168,7 @@ const Cliente = () => {
             </p>
             <button
               onClick={() => abrirModalProducto(producto)}
-              className="mt-2 bg-[#c22b06] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+              className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
             >
               Ver
             </button>

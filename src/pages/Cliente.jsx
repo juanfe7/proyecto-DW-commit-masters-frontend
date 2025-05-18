@@ -180,10 +180,10 @@ const Cliente = () => {
       {isModalOpen && (
         <div
           id="modal-background"
-          className="fixed inset-0 flex items-center justify-center z-50"
+          className="fixed inset-0 z-50 flex items-center justify-center px-4 py-8"
           onClick={closeModalOnClickOutside}
         >
-          <div className="bg-white p-6 rounded-lg shadow-2xl w-1/3">
+          <div className="bg-white w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl p-6 rounded-xl shadow-2xl">
             <div className="flex justify-between items-center border-b-4 border-[#E0EDFF] pb-2">
               <h2 className="text-xl font-bold text-[#041D64]">Filtrar Productos</h2>
               <button
@@ -194,28 +194,34 @@ const Cliente = () => {
               </button>
             </div>
 
-            <div className="mt-4 text-gray-700">
-              <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
-              <div className="flex flex-col gap-2">
-                <label><input type="checkbox" className="mr-2" name="comida" checked={filtroCategoria.comida} onChange={handleCategoriaChange}/>Comida</label>
-                <label><input type="checkbox" className="mr-2" name="bebida" checked={filtroCategoria.bebida} onChange={handleCategoriaChange}/>Bebida</label>
+            <div className="mt-4 text-gray-700 space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
+                <div className="flex flex-col gap-2">
+                  <label><input type="checkbox" className="mr-2" name="comida" checked={filtroCategoria.comida} onChange={handleCategoriaChange}/>Comida</label>
+                  <label><input type="checkbox" className="mr-2" name="bebida" checked={filtroCategoria.bebida} onChange={handleCategoriaChange}/>Bebida</label>
+                </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Precio</h3>
-              <div className="flex flex-col gap-2">
-                <label><input type="checkbox" className="mr-2" name="menos10000" checked={filtroPrecio.menos10000} onChange={handlePrecioChange}/>-$10,000</label>
-                <label><input type="checkbox" className="mr-2" name="entre10000y20000" checked={filtroPrecio.entre10000y20000} onChange={handlePrecioChange}/>$10,000 - $20,000</label>
-                <label><input type="checkbox" className="mr-2" name="mas20000" checked={filtroPrecio.mas20000} onChange={handlePrecioChange}/>$20,000+</label>
+              <div>
+                <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Precio</h3>
+                <div className="flex flex-col gap-2">
+                  <label><input type="checkbox" className="mr-2" name="menos10000" checked={filtroPrecio.menos10000} onChange={handlePrecioChange}/>-$10,000</label>
+                  <label><input type="checkbox" className="mr-2" name="entre10000y20000" checked={filtroPrecio.entre10000y20000} onChange={handlePrecioChange}/>$10,000 - $20,000</label>
+                  <label><input type="checkbox" className="mr-2" name="mas20000" checked={filtroPrecio.mas20000} onChange={handlePrecioChange}/>$20,000+</label>
+                </div>
               </div>
 
-              <h3 className="text-lg font-semibold text-[#041D64] mt-6 mb-2">Por Ubicación</h3>
-              <input
-                type="text"
-                value={ubicacion}
-                onChange={handleUbicacionChange}
-                placeholder="Ej: Embarcadero"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
-              />
+              <div>
+                <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Ubicación</h3>
+                <input
+                  type="text"
+                  value={ubicacion}
+                  onChange={handleUbicacionChange}
+                  placeholder="Ej: Embarcadero"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
+                />
+              </div>
             </div>
           </div>
         </div>

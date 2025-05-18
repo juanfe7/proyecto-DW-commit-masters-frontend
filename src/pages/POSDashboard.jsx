@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import api from '../config/api'
+import Swal from 'sweetalert2'
+
 
 const POSDashboard = () => {
   const [ordenes, setOrdenes] = useState([])
@@ -95,7 +97,20 @@ const POSDashboard = () => {
 
               {orden.status === 'en proceso' && (
                 <button
-                  onClick={() => actualizarEstado(orden.id, 'entregado')}
+                  onClick={async () => {
+                    await actualizarEstado(orden.id, 'entregado');
+
+                    Swal.fire({
+                      title: "Pedido entregado",
+                      text: "El pedido fue marcado como entregado exitosamente.",
+                      icon: "success",
+                      confirmButtonText: "OK",
+                      customClass: {
+                        confirmButton: "bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+                      },
+                      buttonsStyling: false
+                    });
+                  }}
                   className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700"
                 >
                   Marcar como Entregado

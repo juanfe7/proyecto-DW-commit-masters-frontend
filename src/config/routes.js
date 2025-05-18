@@ -9,6 +9,7 @@ import Error403 from '../pages/Error403'
 import InventarioRestaurante from '../pages/InventarioRestaurante'
 import PrivateRoute from '../components/PrivateRoute'
 import ClienteReseñas from '../pages/ClienteReseñas'
+import ClienteNotificaciones from '../pages/ClienteNotificaciones'
 
 
 export const routes = [
@@ -81,5 +82,12 @@ export const routes = [
   name: 'Cliente Reseñas',
   component: ClienteReseñas,
   roles: ['cliente']
+  },  
+  {
+    id: 'cliente-notificaciones',
+    path: '/cliente/notificaciones',
+    name: 'Notificaciones',
+    component: ClienteNotificaciones,
+    roles: ['cliente']
   }
 ]

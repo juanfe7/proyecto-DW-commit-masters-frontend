@@ -1,14 +1,15 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { logout } from '../utils/auth'
+import { useEffect, useState } from 'react'
+import api from '../config/api'
 
 const Navbar = () => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  // Verificar si el usuario está en la sección de cliente
-  const isClienteSection = location.pathname.startsWith('/cliente')
+  const [notificacionesNuevas, setNotificacionesNuevas] = useState(0)
 
-  // Verificar si el usuario está en la sección de POS
+  const isClienteSection = location.pathname.startsWith('/cliente')
   const isPOSSection = location.pathname.startsWith('/pos')
 
   const handleLogoClick = () => {
@@ -19,9 +20,31 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+    const fetchNotificaciones = async () => {
+      try {
+        const res = await api.get('/api/notifications', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const sinLeer = res.data.filter(n => !n.read)
+        setNotificacionesNuevas(sinLeer.length)
+      } catch (err) {
+        console.error('Error al cargar notificaciones:', err)
+      }
+    }
+
+    fetchNotificaciones() // primer fetch inmediato
+
+    const interval = setInterval(fetchNotificaciones, 20000) // cada 20 segundos
+
+    return () => clearInterval(interval) // limpiar al desmontar
+  }, [])
+
   return (
     <nav className="bg-white text-white p-4 flex items-center justify-between">
-      {/* Imagen en el lado izquierdo */}
+      {/* Logo izquierdo */}
       <div className="flex items-center">
         <img
           src="/logo_sabana_navbar.png"
@@ -31,110 +54,79 @@ const Navbar = () => {
         />
       </div>
 
-      {/* Botones lado derecho */}
+      {/* Botones derechos */}
       <div className="flex items-center space-x-4">
-        {/* Cliente: historial y carrito */}
         {isClienteSection && (
           <>
-            {/* Historial de pedidos */}
-            <Link
-              to="/cliente/historial"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+            {/* Historial */}
+            <Link to="/cliente/historial" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
                 src="/receipt-svgrepo-com.svg"
                 alt="Historial de Pedidos"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
             </Link>
 
-            {/* Carrito de compras */}
-            <Link
-              to="/cliente/carrito"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+            {/* Carrito */}
+            <Link to="/cliente/carrito" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
                 src="/icon-add-to-cart.svg"
                 alt="Carrito de Compras"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
             </Link>
 
-            {/*Reseñas */}
-            <Link
-              to="/cliente/reseñas"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+            {/* Reseñas */}
+            <Link to="/cliente/reseñas" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
                 src="/review-file-svgrepo-com.svg"
                 alt="Dejar Reseña"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
             </Link>
-            <Link
-              to="/cliente/notificaciones"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+
+            {/* Notificaciones */}
+            <Link to="/cliente/notificaciones" className="relative bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
-                src="/bell-svgrepo-com.svg" 
+                src="/bell-svgrepo-com.svg"
                 alt="Notificaciones"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
+              {notificacionesNuevas > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs px-1 rounded-full">
+                  {notificacionesNuevas}
+                </span>
+              )}
             </Link>
           </>
         )}
 
-        {/* POS: solo dashboard */}
         {isPOSSection && (
           <>
-            <Link
-              to="/pos/dashboard"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+            <Link to="/pos/dashboard" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
                 src="/receipt-svgrepo-com.svg"
                 alt="Dashboard"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
             </Link>
-            <Link
-              to="/pos/profile"
-              className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
-            >
+            <Link to="/pos/profile" className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]">
               <img
                 src="/review-file-svgrepo-com.svg"
                 alt="Perfil POS"
                 className="w-6 h-6"
-                style={{
-                  filter:
-                    'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)',
-                }}
+                style={{ filter: 'invert(13%) sepia(100%) saturate(747%) hue-rotate(211deg) brightness(50%) contrast(120%)' }}
               />
             </Link>
           </>
         )}
 
-        {/* Botón cerrar sesión (para todos) */}
+        {/* Logout */}
         <button
           onClick={logout}
           className="bg-white px-3 py-2 rounded-lg hover:bg-[#E0EDFF] text-[#041D64] border border-[#041D64]"

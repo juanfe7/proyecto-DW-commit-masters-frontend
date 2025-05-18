@@ -7,19 +7,21 @@ const POSDashboard = () => {
   const [error, setError] = useState(null)
 
   const fetchOrdenes = async () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     try {
-      const estados = ['en confirmacion', 'en proceso']
-      const responses = await Promise.all(estados.map(status =>
-        api.get(`/api/orders?status=${encodeURIComponent(status)}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        }).then(res => res.data)
-      ))
-      const combinadas = responses.flat()
-      setOrdenes(combinadas)
-    } catch (err) {
-      setError('No se pudieron obtener las órdenes')
-      console.error(err)
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      if (!token) return;
+
+      const res = await api.get('/api/orders/all', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('✅ Órdenes obtenidas:', res.data)
+      setOrdenes(res.data)
+    } catch (error) {
+      console.error('❌ Error al cargar órdenes:', error.response || error.message || error)
+      setError('Error al cargar órdenes')
     } finally {
       setLoading(false)
     }
@@ -43,6 +45,8 @@ const POSDashboard = () => {
     }
   }
 
+  const ordenesActivas = ordenes.filter(orden => orden.status !== 'entregado')
+
   return (
     <div className="min-h-screen bg-white text-[#041D64] px-8 py-6 max-w-[80%] mx-auto">
       <h1 className="text-3xl font-bold mb-6">Gestión de Pedidos</h1>
@@ -51,11 +55,11 @@ const POSDashboard = () => {
         <p className="text-gray-500">Cargando órdenes...</p>
       ) : error ? (
         <p className="text-red-500">{error}</p>
-      ) : ordenes.length === 0 ? (
+      ) : ordenesActivas.length === 0 ? (
         <p className="text-gray-500">No hay órdenes en confirmación o proceso.</p>
       ) : (
         <div className="space-y-6">
-          {ordenes.map((orden) => (
+          {ordenesActivas.map((orden) => (
             <div
               key={orden.id}
               className="border border-gray-300 rounded-lg shadow-md p-4 bg-gray-50"

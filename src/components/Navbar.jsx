@@ -47,6 +47,7 @@ const Navbar = () => {
         {/* Cliente: historial y carrito */}
         {isClienteSection && (
           <>
+            {/* Historial de pedidos */}
             <Link
               to="/cliente/historial"
               className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
@@ -61,6 +62,8 @@ const Navbar = () => {
                 }}
               />
             </Link>
+
+            {/* Carrito de compras */}
             <Link
               to="/cliente/carrito"
               className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
@@ -75,12 +78,14 @@ const Navbar = () => {
                 }}
               />
             </Link>
+
+            {/* Nueva sección: Reseñas */}
             <Link
               to="/cliente/reseñas"
               className="bg-[#E0EDFF] px-2 py-2 rounded-lg hover:bg-[#d6e8ff]"
             >
               <img
-                src="/review-file-svgrepo-com.svg"
+                src="/review-file-svgrepo-com.svg"  // asegúrate que este archivo esté en /public
                 alt="Dejar Reseña"
                 className="w-6 h-6"
                 style={{

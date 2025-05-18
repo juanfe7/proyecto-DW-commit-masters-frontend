@@ -29,7 +29,12 @@ const ClienteReseñas = () => {
     }
 
     try {
-      await api.post('/api/reviews', { docId, rating: Number(rating), comment }, {
+      console.log('📤 docId enviado:', docId)
+      await api.post('/api/reviews', {
+        docId,
+        rating: Number(rating),
+        comment
+      }, {
         headers: { Authorization: `Bearer ${token}` }
       })
 
@@ -62,7 +67,9 @@ const ClienteReseñas = () => {
         >
           <option value="">Selecciona un producto</option>
           {productos.map((p) => (
-            <option key={p.docid} value={p.docid}>{p.name}</option>
+            <option key={p.docId} value={p.docId}>
+              {p.name}
+            </option>
           ))}
         </select>
       </label>

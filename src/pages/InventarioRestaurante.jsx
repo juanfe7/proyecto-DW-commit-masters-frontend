@@ -241,19 +241,35 @@ const InventarioRestaurante = () => {
                 <label>
                   <span className="font-semibold">Precio:</span>
                   <input
-                    type="number"
-                    value={productoEditado.price}
-                    onChange={(e) => setProductoEditado({ ...productoEditado, price: Number(e.target.value) })}
+                    type="text"
+                    inputMode="numeric"
+                    value={productoEditado.price === 0 ? '' : productoEditado.price}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setProductoEditado({ ...productoEditado, price: '' });
+                      } else if (/^\d+$/.test(val)) {
+                        setProductoEditado({ ...productoEditado, price: Number(val) });
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   />
                 </label>
 
                 <label>
                   <span className="font-semibold">Stock:</span>
-                  <input
-                    type="number"
-                    value={productoEditado.stock}
-                    onChange={(e) => setProductoEditado({ ...productoEditado, stock: Number(e.target.value) })}
+                 <input
+                    type="text"
+                    inputMode="numeric"
+                    value={productoEditado.stock === 0 ? '' : productoEditado.stock}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val === '') {
+                        setProductoEditado({ ...productoEditado, stock: '' });
+                      } else if (/^\d+$/.test(val)) {
+                        setProductoEditado({ ...productoEditado, stock: Number(val) });
+                      }
+                    }}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
                   />
                 </label>
@@ -303,15 +319,37 @@ const InventarioRestaurante = () => {
             </label>
 
             <label className="text-sm">Precio:
-              <input type="number" value={nuevoProducto.price}
-                onChange={(e) => setNuevoProducto({ ...nuevoProducto, price: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+              <input
+                type="text"
+                inputMode="numeric"
+                value={nuevoProducto.price === 0 ? '' : nuevoProducto.price}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '') {
+                    setNuevoProducto({ ...nuevoProducto, price: '' });
+                  } else if (/^\d+$/.test(val)) {
+                    setNuevoProducto({ ...nuevoProducto, price: Number(val) });
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              />
             </label>
 
             <label className="text-sm">Stock:
-              <input type="number" value={nuevoProducto.stock}
-                onChange={(e) => setNuevoProducto({ ...nuevoProducto, stock: Number(e.target.value) })}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg" />
+             <input
+                type="text"
+                inputMode="numeric"
+                value={nuevoProducto.stock === 0 ? '' : nuevoProducto.stock}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '') {
+                    setNuevoProducto({ ...nuevoProducto, stock: '' });
+                  } else if (/^\d+$/.test(val)) {
+                    setNuevoProducto({ ...nuevoProducto, stock: Number(val) });
+                  }
+                }}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+              />
             </label>
 
             <label className="text-sm">Categoría:

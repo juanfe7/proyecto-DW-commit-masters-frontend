@@ -264,10 +264,17 @@ const Cliente = () => {
             <div className="mt-6">
               <label className="block text-sm font-medium text-[#041D64] mb-2">Cantidad</label>
               <input
-                type="number"
-                min="1"
-                value={cantidadSeleccionada}
-                onChange={(e) => setCantidadSeleccionada(Number(e.target.value))}
+                type="text"
+                inputMode="numeric"
+                value={cantidadSeleccionada === 0 ? '' : cantidadSeleccionada}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '') {
+                    setCantidadSeleccionada('');
+                  } else if (/^\d+$/.test(val) && Number(val) > 0) {
+                    setCantidadSeleccionada(Number(val));
+                  }
+                }}
                 placeholder="Ingrese cantidad"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#041D64]"
               />

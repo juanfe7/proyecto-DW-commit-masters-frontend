@@ -151,16 +151,16 @@ const Cliente = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-3 gap-8 px-8 py-6 max-w-[80%] mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6 max-w-7xl mx-auto">
         {productos.map((producto) => (
-          <div key={producto.id} className="flex flex-col items-center">
+          <div key={producto.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col items-center">
             <div
-              className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
+              className="w-full aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden cursor-pointer"
               onClick={() => abrirModalProducto(producto)}
             >
               <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
-            <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
+            <h2 className="mt-3 font-bold text-lg text-center">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
             <p className="text-sm text-gray-700">Ubicación: {producto.location}</p>
             <p className={`text-sm font-medium ${producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
@@ -175,6 +175,7 @@ const Cliente = () => {
           </div>
         ))}
       </div>
+
 
       {isModalOpen && (
         <div

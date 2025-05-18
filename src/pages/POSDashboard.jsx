@@ -10,7 +10,7 @@ const POSDashboard = () => {
   const obtenerOrdenes = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-      const res = await api.get('/api/orders', {
+      const res = await api.get('/api/orders/all', {
         headers: { Authorization: `Bearer ${token}` }
       })
       setOrdenes(res.data)

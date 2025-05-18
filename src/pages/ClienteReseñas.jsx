@@ -62,7 +62,7 @@ const ClienteReseñas = () => {
         >
           <option value="">Selecciona un producto</option>
           {productos.map((p) => (
-            <option key={p.id} value={p.id}>{p.name}</option>
+            <option key={p.docid} value={p.docid}>{p.name}</option>
           ))}
         </select>
       </label>

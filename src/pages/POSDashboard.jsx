@@ -39,7 +39,6 @@ const POSDashboard = () => {
       await api.patch(`/api/orders/${id}/status`, { status: nuevoEstado }, {
         headers: { Authorization: `Bearer ${token}` }
       })
-      alert(`Estado actualizado a "${nuevoEstado}"`)
       fetchOrdenes()
     } catch (err) {
       console.error(err)

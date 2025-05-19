@@ -14,7 +14,7 @@ import PrivateRoute from './components/PrivateRoute'
 const AppContent = () => {
   const location = useLocation()
 
-  // Oculta el navbar solo en la página de login
+  // Oculta el navbar solo en la pagina de login
   const hideNavbar = location.pathname === '/login'
 
   return (
@@ -23,10 +23,10 @@ const AppContent = () => {
 
       <main className="flex-grow overflow-auto">
         <Routes>
-          {/* Redirección de la raíz a /login */}
+          {/* Redireccion de / a /login */}
           <Route path="/" element={<Navigate to="/login" />} />
 
-          {/* Rutas dinámicas desde routes.js */}
+          {/* Rutas dinamicas desde routes.js */}
           {routes.map(({ id, path, component: Component, roles }) => {
             const isProtected = roles && roles.length > 0
 

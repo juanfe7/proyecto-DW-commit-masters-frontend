@@ -1,3 +1,4 @@
+// Importa todos los componentes de pagina usados en las rutas
 import ClienteCarrito from '../pages/ClienteCarrito'
 import ClienteHisrorial from '../pages/ClienteHistorial'
 import POSDashboard from '../pages/POSDashboard'
@@ -13,6 +14,7 @@ import ClienteNotificaciones from '../pages/ClienteNotificaciones'
 
 
 export const routes = [
+  // Cada objeto representa una ruta, su path, componente y roles permitidos
   {
     id: 'login',
     path: '/login',

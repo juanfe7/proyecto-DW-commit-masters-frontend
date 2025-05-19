@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../config/api' // ✅ AÑADIDO
+import api from '../config/api' 
 
 const Login = () => {
   const [usuario, setUsuario] = useState('')
   const [contraseña, setContraseña] = useState('')
-  const [error, setError] = useState('') // ✅ AÑADIDO
+  const [error, setError] = useState('') 
   const [rememberMe, setRememberMe] = useState(false)
   const navigate = useNavigate()
 
@@ -29,7 +29,7 @@ const Login = () => {
       });
   
       const data = await response.json();
-      console.log('Respuesta del servidor:', data); // ✅ AÑADIDO
+      console.log('Respuesta del servidor:', data);
 
       if (!response.ok) {
         alert(data.error || 'Error al iniciar sesión');
@@ -130,7 +130,7 @@ const Login = () => {
             Recordar Sesión
           </label>
         </div>
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} {/* ✅ MOSTRAR ERROR */}
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>} 
         <button
           type="submit"
           className="w-3/4 mx-auto bg-[#193F9E] text-white py-2 rounded-[15px] hover:bg-blue-600 block"

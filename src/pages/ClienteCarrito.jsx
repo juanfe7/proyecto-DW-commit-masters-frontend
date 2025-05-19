@@ -51,14 +51,14 @@ const ClienteCarrito = () => {
       }
     );
 
-    alert('✅ Pedido realizado con éxito');
+    alert('Pedido realizado con éxito');
     clearCart();
     setCartItems([]);
     navigate('/cliente/historial');
   } catch (error) {
     console.error('Error al hacer pedido:', error);
     const mensaje = error?.response?.data?.message || 'Hubo un error al realizar el pedido.';
-    alert(`❌ ${mensaje}`);
+    alert(`${mensaje}`);
   }
   };
 

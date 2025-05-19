@@ -32,7 +32,7 @@ const InventarioRestaurante = () => {
       })
       setProductos(res.data)
     } catch (error) {
-      console.error('❌ Error al cargar productos:', error)
+      console.error('Error al cargar productos:', error)
     }
   }
 
@@ -178,7 +178,7 @@ const InventarioRestaurante = () => {
                         icon: "success"
                       })
                     } catch (error) {
-                      console.error('❌ Error al eliminar producto:', error)
+                      console.error('Error al eliminar producto:', error)
                       Swal.fire("Error", "No se pudo eliminar el producto.", "error")
                     }
                   } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -392,7 +392,7 @@ const InventarioRestaurante = () => {
                     })
                     fetchProductos()
                   } catch (err) {
-                    console.error('❌ Error al crear producto:', err)
+                    console.error('Error al crear producto:', err)
                     alert('Error al crear el producto')
                   }
                 }}

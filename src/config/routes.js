@@ -1,7 +1,7 @@
 // Importa todos los componentes de pagina usados en las rutas
 import ClienteCarrito from '../pages/ClienteCarrito'
 import ClienteHisrorial from '../pages/ClienteHistorial'
-import POSDashboard from '../pages/POSDashboard'
+import POSPedidos from '../pages/POSPedidos'
 import POSProfile from '../pages/POSProfile'
 import Login from '../pages/Login'
 import Cliente from '../pages/Cliente'
@@ -51,10 +51,10 @@ export const routes = [
     roles: ['pos']
   },
   {
-    id: 'pos-dashboard',
-    path: '/pos/dashboard',
-    name: 'POS Dashboard',
-    component: POSDashboard,
+    id: 'pos-pedidos',
+    path: '/pos/pedidos',
+    name: 'Gestión de Pedidos',
+    component: POSPedidos,
     roles: ['pos']
   },
   {

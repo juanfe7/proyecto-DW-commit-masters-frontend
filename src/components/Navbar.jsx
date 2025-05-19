@@ -117,7 +117,7 @@ const Navbar = () => {
           {/* Menu principal POS*/}
           {isPOSSection && (
             <>
-              <Link to="/pos/dashboard" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
+              <Link to="/pos/profile" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
                 <img
                   src="/receipt-svgrepo-com.svg"
                   alt="Dashboard"

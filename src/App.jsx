@@ -2,19 +2,17 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { routes } from './config/routes'
-import { BackgroundProvider, useBackground } from './context/BackgroundContext'
 import PrivateRoute from './components/PrivateRoute'
 import POS from './pages/POS'
 import InventarioRestaurante from './pages/InventarioRestaurante'
 
 const AppContent = () => {
-  const { backgroundColor } = useBackground()
   const location = useLocation()
 
   const hideNavbar = location.pathname === '/login'
 
   return (
-    <div className={`flex flex-col min-h-screen ${backgroundColor}`}>
+    <div className={`flex flex-col min-h-screen`}>
       {!hideNavbar && <Navbar />}
       <main className="flex-grow overflow-auto">
         <Routes>
@@ -46,9 +44,7 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
-      <BackgroundProvider>
         <AppContent />
-      </BackgroundProvider>
     </Router>
   )
 }

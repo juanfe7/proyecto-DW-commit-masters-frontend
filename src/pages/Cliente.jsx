@@ -27,20 +27,22 @@ const Cliente = () => {
 
   const [nombre, setNombre] = useState('')
 
+  // Obtiene el nombre del usuario desde el token
   useEffect(() => {
     const user = getUserFromToken();
-    console.log('User desde token:', user); // aquí deberías ver el nombre correctamente
+    console.log('User desde token:', user);
     if (user?.name) {
       setNombre(user.name);
     }
   }, []);
 
-
+  // Abre/cierra el modal de filtros
   const toggleModalFiltro = () => setIsModalOpen(!isModalOpen)
   const closeModalOnClickOutside = (e) => {
     if (e.target.id === 'modal-background') setIsModalOpen(false)
   }
 
+  // Abre/cierra el modal de informacion de producto
   const abrirModalProducto = (producto) => setProductoSeleccionado(producto)
   const cerrarModalProducto = () => {
     setProductoSeleccionado(null);
@@ -52,6 +54,7 @@ const Cliente = () => {
     return string.charAt(0).toUpperCase() + string.slice(1)
   }
 
+  // Obtiene productos del backend segun filtros
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -66,6 +69,7 @@ const Cliente = () => {
 
       let responses = []
 
+      // Logica para combinar filtros de categoría, precio y ubicacion
       if (categorias.length > 0 && priceRanges.length > 0) {
         responses = await Promise.all(
           categorias.flatMap(cat =>
@@ -113,6 +117,7 @@ const Cliente = () => {
         responses = [res.data]
       }
 
+      // Elimina productos duplicados por id
       const todos = responses.flat()
       const unicos = Array.from(new Map(todos.map(p => [p.id, p])).values())
       setProductos(unicos)
@@ -121,9 +126,13 @@ const Cliente = () => {
     }
   }
 
+  // Refresca productos cuando cambian los filtros
   useEffect(() => {
     fetchProductos()
   }, [filtroPrecio, filtroCategoria, ubicacion])
+
+
+  // Handlers para filtros
 
   const handlePrecioChange = (e) => {
     const { name, checked } = e.target
@@ -151,6 +160,7 @@ const Cliente = () => {
         </button>
       </div>
 
+      {/* Grid de productos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6 max-w-7xl mx-auto">
         {productos.map((producto) => (
           <div key={producto.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition flex flex-col items-center">
@@ -176,7 +186,7 @@ const Cliente = () => {
         ))}
       </div>
 
-
+      {/* Modal de filtros */}
       {isModalOpen && (
         <div
           id="modal-background"
@@ -194,6 +204,7 @@ const Cliente = () => {
               </button>
             </div>
 
+            {/* Filtros por categoria, precio y ubicacion */}
             <div className="mt-4 text-gray-700 space-y-6">
               <div>
                 <h3 className="text-lg font-semibold text-[#041D64] mb-2">Por Categoría</h3>
@@ -227,6 +238,7 @@ const Cliente = () => {
         </div>
       )}
 
+      {/* Modal de informacion del producto y agregar al carrito */}
       {productoSeleccionado && (
         <div
           className="fixed inset-0 flex items-center justify-center z-50"

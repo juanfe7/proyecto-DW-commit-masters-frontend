@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import api from '../config/api'
 import Swal from 'sweetalert2'
 
+// Pagina de gestion de pedidos para POS
 const POSPedidos = () => {
-  const [ordenes, setOrdenes] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [ordenes, setOrdenes] = useState([]) // Lista de ordenes
+  const [loading, setLoading] = useState(true) // Estado de carga
+  const [error, setError] = useState(null) // Estado de error
 
+  // Obtiene todas las ordenes del backend
   const obtenerOrdenes = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -22,6 +24,7 @@ const POSPedidos = () => {
     }
   }
 
+  // Cambia el estado de una orden y recarga la lista
   const actualizarEstado = async (id, nuevoEstado) => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -34,10 +37,12 @@ const POSPedidos = () => {
     }
   }
 
+  // Carga las ordenes
   useEffect(() => {
     obtenerOrdenes()
   }, [])
 
+  // Filtra solo las ordenes activas (no entregadas)
   const ordenesActivas = ordenes.filter(
     (orden) => orden.status === 'en confirmacion' || orden.status === 'en proceso' || orden.status === 'listo'
   )
@@ -46,6 +51,7 @@ const POSPedidos = () => {
     <div className="min-h-screen bg-white text-[#041D64] px-4 sm:px-8 py-6 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-6 text-center sm:text-left">Gestión de Pedidos</h1>
 
+      {/* Muestra estado de carga, error o lista de ordenes activas */}
       {loading ? (
         <p className="text-gray-500">Cargando órdenes...</p>
       ) : error ? (

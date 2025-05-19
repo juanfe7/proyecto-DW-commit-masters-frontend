@@ -3,11 +3,12 @@ import api from '../config/api'
 import Swal from 'sweetalert2'
 
 const ClienteReseñas = () => {
-  const [productos, setProductos] = useState([])
-  const [docId, setDocId] = useState('')
-  const [rating, setRating] = useState(5)
-  const [comment, setComment] = useState('')
+  const [productos, setProductos] = useState([]) // Lista de productos disponibles
+  const [docId, setDocId] = useState('') // Producto seleccionado
+  const [rating, setRating] = useState(5) // Calificación
+  const [comment, setComment] = useState('') // Comentario
 
+  // Obtiene la lista de productos
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -20,9 +21,11 @@ const ClienteReseñas = () => {
     }
   }
 
+  // Envía la reseña al backend
   const enviarReseña = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
+    // Validacion de campos obligatorios
     if (!docId || !rating || !comment.trim()) {
       Swal.fire('Campos incompletos', 'Por favor completa todos los campos.', 'warning')
       return
@@ -58,6 +61,7 @@ const ClienteReseñas = () => {
     <div className="max-w-xl mx-auto p-8 text-[#041D64]">
       <h1 className="text-2xl font-bold mb-6">Dejar una Reseña</h1>
 
+      {/* Selector de producto */}
       <label className="block mb-4">
         <span className="block font-medium mb-1">Producto</span>
         <select

@@ -5,6 +5,7 @@ const POSReseñas = () => {
   const [reseñas, setReseñas] = useState([])
   const [cargando, setCargando] = useState(true)
 
+  // Obtiene las reseñas del backend
   const fetchReseñas = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -19,9 +20,11 @@ const POSReseñas = () => {
     }
   }
 
+  // Renderiza estrellas segun la calificacion
   const renderEstrellas = (n) =>
     '★★★★★☆☆☆☆☆'.slice(5 - n, 10 - n)
 
+  // Carga las reseñas
   useEffect(() => {
     fetchReseñas()
   }, [])

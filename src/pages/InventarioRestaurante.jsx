@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import api from '../config/api'
 import Swal from 'sweetalert2'
 
+// Pagina de inventario para un restaurante especifico (POS)
 const InventarioRestaurante = () => {
   const { ubicacion } = useParams()
   const navigate = useNavigate()
@@ -22,6 +23,7 @@ const InventarioRestaurante = () => {
   const handleVolverAtras = () => navigate('/pos')
   const handleAgregarProducto = () => setMostrandoModalAgregar(true)
 
+  // Obtiene los productos del backend segun la ubicación
   const fetchProductos = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -39,6 +41,7 @@ const InventarioRestaurante = () => {
   const capitalizeFirstLetter = (string) =>
     string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
 
+  // Carga productos al cambiar la ubicacion
   useEffect(() => {
     fetchProductos()
   }, [ubicacion])

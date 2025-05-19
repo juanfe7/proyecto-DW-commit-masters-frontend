@@ -68,7 +68,7 @@ const InventarioRestaurante = () => {
       </div>
 
       {/* Grid de productos*/}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4 py-6 max-w-7xl mx-auto">
         {productos.map((producto) => (
           <div key={producto.id} className="flex flex-col items-center bg-white shadow rounded-lg p-4">
             <div

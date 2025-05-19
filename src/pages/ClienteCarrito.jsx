@@ -12,6 +12,7 @@ const ClienteCarrito = () => {
     cargarCarrito()
   }, [])
 
+  // Obtiene los productos del carrito
   const cargarCarrito = () => {
     const items = getCart()
     setCartItems(items)
@@ -21,16 +22,19 @@ const ClienteCarrito = () => {
     navigate('/cliente')
   }
 
+  // Elimina un producto del carrito
   const handleEliminar = (id) => {
     removeFromCart(id)
     cargarCarrito()
   }
 
+  // Vacía todo el carrito
   const handleVaciarCarrito = () => {
     clearCart()
     setCartItems([])
   }
 
+  // Envía el pedido al backend y limpia el carrito si es exitoso
   const handleHacerPedido = async () => {
   const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   const products = getCart().map(({ id, quantity }) => ({ id, quantity }));
@@ -62,13 +66,14 @@ const ClienteCarrito = () => {
   }
   };
 
+  // Calcula el total del carrito
   const calcularTotal = () => {
     return cartItems.reduce((total, item) => total + item.price * item.quantity, 0)
   }
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
-      {/* Encabezado responsive */}
+      {/*Encabezado*/}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-8 py-6 border-b-4 border-[#E0EDFF] max-w-7xl mx-auto gap-4">
         <h1 className="text-2xl font-bold">Carrito de Compras</h1>
         <button
@@ -79,7 +84,7 @@ const ClienteCarrito = () => {
         </button>
       </div>
 
-      {/* Contenido principal */}
+      {/*Contenido principal*/}
       <div className="px-4 sm:px-8 py-6 max-w-7xl mx-auto">
         {cartItems.length === 0 ? (
           <p className="text-gray-500">Tu carrito está vacío.</p>
@@ -111,7 +116,7 @@ const ClienteCarrito = () => {
               ))}
             </ul>
 
-            {/* Total y acciones */}
+            {/*Total y acciones*/}
             <div className="mt-6 flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center">
               <div className="text-xl font-bold text-[#041D64]">
                 Total: ${calcularTotal()}

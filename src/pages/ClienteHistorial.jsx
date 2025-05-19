@@ -4,14 +4,15 @@ import api from '../config/api'
 
 const ClienteHistorial = () => {
   const navigate = useNavigate()
-  const [orders, setOrders] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [orders, setOrders] = useState([]) // Lista de pedidos
+  const [loading, setLoading] = useState(true) // Estado de carga
+  const [error, setError] = useState(null) // Estado de error
 
   const handleVolverAtras = () => {
     navigate('/cliente')
   }
 
+  // Limpia el historial visualmente (solo en el estado, no en backend)
   const handleLimpiarHistorial = () => {
     const confirmacion = window.confirm('¿Estás seguro de que quieres borrar tu historial visualmente?')
     if (confirmacion) {
@@ -19,6 +20,7 @@ const ClienteHistorial = () => {
     }
   }
 
+  // Obtiene el historial de pedidos del backend
   useEffect(() => {
     const fetchHistorial = async () => {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -40,7 +42,7 @@ const ClienteHistorial = () => {
 
   return (
     <div className="min-h-screen bg-white text-[#041D64]">
-      {/* Encabezado responsive */}
+      {/* Encabezado */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 sm:px-8 py-6 border-b-4 border-[#E0EDFF] max-w-7xl mx-auto gap-4">
         <h1 className="text-2xl font-bold">Historial de Pedidos</h1>
         <div className="flex gap-4 flex-wrap">

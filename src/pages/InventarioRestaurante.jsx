@@ -67,24 +67,24 @@ const InventarioRestaurante = () => {
         </div>
       </div>
 
-      {/* Grid de productos */}
-      <div className="grid grid-cols-3 gap-8">
+      {/* Grid de productos*/}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {productos.map((producto) => (
-          <div key={producto.id} className="flex flex-col items-center">
+          <div key={producto.id} className="flex flex-col items-center bg-white shadow rounded-lg p-4">
             <div
-              className="w-3/4 h-60 bg-gray-200 rounded-lg overflow-hidden"
+              className="w-full aspect-[4/3] bg-gray-200 rounded-lg overflow-hidden"
               onClick={() => setProductoSeleccionado(producto)}
             >
               <img src={producto.image} alt={producto.name} className="w-full h-full object-cover" />
             </div>
-            <h2 className="mt-2 font-bold text-lg">{producto.name}</h2>
+            <h2 className="mt-3 font-bold text-lg text-center">{producto.name}</h2>
             <p className="text-sm text-gray-700 font-medium">Precio: ${producto.price}</p>
             <p className={`text-sm font-medium ${producto.stock <= 10 ? 'text-red-500' : 'text-gray-700'}`}>
               Stock: {producto.stock}
             </p>
             <button
               onClick={() => setProductoSeleccionado(producto)}
-              className="mt-2 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
+              className="mt-3 bg-[#041D64] text-white px-4 py-2 rounded-lg hover:bg-[#193F9E]"
             >
               Ver
             </button>

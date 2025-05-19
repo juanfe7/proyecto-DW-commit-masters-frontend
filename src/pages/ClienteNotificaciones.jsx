@@ -4,6 +4,7 @@ import api from '../config/api'
 const ClienteNotificaciones = () => {
   const [notificaciones, setNotificaciones] = useState([])
 
+  // Obtiene las notificaciones del backend
   const fetchNotificaciones = async () => {
     try {
       const token = localStorage.getItem('token') || sessionStorage.getItem('token')
@@ -16,6 +17,7 @@ const ClienteNotificaciones = () => {
     }
   }
 
+  // Marca una notificacion como leida y actualiza la lista
   const marcarComoLeida = async (id) => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
     try {
@@ -28,6 +30,7 @@ const ClienteNotificaciones = () => {
     }
   }
 
+  // Carga las notificaciones
   useEffect(() => {
     fetchNotificaciones()
   }, [])
@@ -36,6 +39,7 @@ const ClienteNotificaciones = () => {
     <div className="max-w-xl mx-auto p-6 text-[#041D64]">
       <h1 className="text-2xl font-bold mb-4">Notificaciones</h1>
 
+      {/* Lista de notificaciones*/}
       {notificaciones.length === 0 ? (
         <p className="text-gray-500">No tienes notificaciones nuevas.</p>
       ) : (

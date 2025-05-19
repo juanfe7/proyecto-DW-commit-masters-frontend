@@ -1,41 +1,48 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  useLocation
+} from 'react-router-dom'
+
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { routes } from './config/routes'
 import PrivateRoute from './components/PrivateRoute'
-import POS from './pages/POS'
-import InventarioRestaurante from './pages/InventarioRestaurante'
 
 const AppContent = () => {
   const location = useLocation()
 
+  // Oculta el navbar solo en la página de login
   const hideNavbar = location.pathname === '/login'
 
   return (
-    <div className={`flex flex-col min-h-screen`}>
+    <div className="flex flex-col min-h-screen">
       {!hideNavbar && <Navbar />}
+
       <main className="flex-grow overflow-auto">
         <Routes>
+          {/* Redirección de la raíz a /login */}
           <Route path="/" element={<Navigate to="/login" />} />
-          {routes.map((route) => {
-            const isProtected = route.roles && route.roles.length > 0
+
+          {/* Rutas dinámicas desde routes.js */}
+          {routes.map(({ id, path, component: Component, roles }) => {
+            const isProtected = roles && roles.length > 0
 
             const element = isProtected ? (
-              <PrivateRoute allowedRoles={route.roles}>
-                <route.component />
+              <PrivateRoute allowedRoles={roles}>
+                <Component />
               </PrivateRoute>
             ) : (
-              <route.component />
+              <Component />
             )
 
-            return <Route key={route.id} path={route.path} element={element} />
+            return <Route key={id} path={path} element={element} />
           })}
-          
-          {/* Rutas adicionales */}
-          <Route path="/pos" element={<POS />} />
-          <Route path="/pos/inventarioRestaurante/:ubicacion" element={<InventarioRestaurante />} />
         </Routes>
       </main>
+
       <Footer />
     </div>
   )
@@ -44,7 +51,7 @@ const AppContent = () => {
 function App() {
   return (
     <Router>
-        <AppContent />
+      <AppContent />
     </Router>
   )
 }

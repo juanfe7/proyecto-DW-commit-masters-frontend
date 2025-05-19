@@ -73,7 +73,7 @@ export const routes = [
   },
   {
     id: 'inventario-restaurante',
-    path: '/pos/inventarioRestaurante',
+    path: '/pos/inventarioRestaurante/:ubicacion',
     name: 'Inventario Restaurante',
     component: InventarioRestaurante,
     roles: ['pos']

@@ -2,7 +2,7 @@
 import ClienteCarrito from '../pages/ClienteCarrito'
 import ClienteHisrorial from '../pages/ClienteHistorial'
 import POSPedidos from '../pages/POSPedidos'
-import POSProfile from '../pages/POSProfile'
+import POSReseñas from '../pages/POSReseñas'
 import Login from '../pages/Login'
 import Cliente from '../pages/Cliente'
 import POS from '../pages/POS'
@@ -58,10 +58,10 @@ export const routes = [
     roles: ['pos']
   },
   {
-    id: 'pos-profile',
-    path: '/pos/profile',
-    name: 'POS Profile',
-    component: POSProfile,
+    id: 'pos-reseñas',
+    path: '/pos/reseñas',
+    name: 'Reseñas de Productos',
+    component: POSReseñas,
     roles: ['pos']
   },
   {

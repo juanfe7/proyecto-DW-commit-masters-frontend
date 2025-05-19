@@ -8,8 +8,11 @@ const Navbar = () => {
   const navigate = useNavigate()
 
   const [notificacionesNuevas, setNotificacionesNuevas] = useState(0)
+
+  // Estado para mostrar u ocultar el men en celular
   const [menuAbierto, setMenuAbierto] = useState(false)
 
+  // Determina en que seccion estamos para Navbar correspondiente
   const isClienteSection = location.pathname.startsWith('/cliente')
   const isPOSSection = location.pathname.startsWith('/pos')
 
@@ -54,7 +57,7 @@ const Navbar = () => {
           />
         </div>
 
-        {/* Hamburguesa (mobile) */}
+        {/* Menu movil*/}
         <div className="md:hidden">
           <button onClick={() => setMenuAbierto(!menuAbierto)} className="text-[#041D64] focus:outline-none">
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +70,7 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Botones Desktop */}
+        {/* Menu principal cliente*/}
         <div className="hidden md:flex items-center space-x-4">
           {isClienteSection && (
             <>
@@ -111,6 +114,7 @@ const Navbar = () => {
             </>
           )}
 
+          {/* Menu principal POS*/}
           {isPOSSection && (
             <>
               <Link to="/pos/dashboard" className="bg-[#E0EDFF] px-3 py-2 rounded-lg hover:bg-[#d6e8ff]">
@@ -141,7 +145,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Menú móvil colapsado */}
+      {/* Menu movil desplegado*/}
       {menuAbierto && (
         <div className="md:hidden px-4 pb-4 space-y-3 text-center">
           {isClienteSection && (
